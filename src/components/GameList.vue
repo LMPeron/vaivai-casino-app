@@ -8,11 +8,10 @@
               append-icon="mdi-open-in-new"
               class="py-4"
               color="surface-variant"
-              href="https://vuetifyjs.com/"
               rel="noopener noreferrer"
               rounded="lg"
               :subtitle="game.identifier"
-              target="_blank"
+              @click="$emit('open', game.id)"
               :title="game.title"
               variant="text"
             >

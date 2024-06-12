@@ -1,5 +1,6 @@
 <template>
-  <GameList :gameList="gameList" />
+  <GameList v-if="!gameUrl" :gameList="gameList" @open="openGame($event)" />
+  <GameFrame v-else :gameUrl="gameUrl" />
 </template>
 
 <script>
@@ -11,6 +12,7 @@ export default {
       gameService: new GameService(),
       gameList: [],
       loading: false,
+      gameUrl: '',
     };
   },
   methods: {
@@ -24,6 +26,17 @@ export default {
     },
     async getData() {
       await this.getGameList();
+    },
+    async openGame(gameId) {
+      try {
+        const response = await this.gameService.open(gameId, 'desktop', {
+          deposit_url: 'https://example.com/deposit',
+          return_url: 'https://example.com',
+        });
+        this.gameUrl = response.data.game_url;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 
