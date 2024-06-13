@@ -4,7 +4,7 @@ import useUserStore from '@/stores/user.js';
 
 const routes = [
   {
-    path: '',
+    path: '/',
     // component: AppLayout,
     meta: {
       requiresAuth: true,
@@ -21,7 +21,7 @@ const routes = [
     ],
   },
   {
-    path: '/auth/:auth',
+    path: '/:auth',
     component: () => import('@/pages/AuthMiddleware.vue'),
   },
 ];
