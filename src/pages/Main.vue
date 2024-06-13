@@ -25,6 +25,7 @@ export default {
       try {
         const response = await this.gameService.getAll();
         this.gameList = response.data?.gameList;
+        console.log(this.gameList);
       } catch (error) {
         console.log(error);
       }
