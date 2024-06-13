@@ -1,28 +1,28 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router';
 // import AppLayout from "@/layout/AppLayout.vue";
-import useUserStore from "@/stores/user.js";
+import useUserStore from '@/stores/user.js';
 
 const routes = [
   {
-    path: "/",
+    path: '/',
     // component: AppLayout,
-    // meta: {
-    //   requiresAuth: true,
-    // },
+    meta: {
+      requiresAuth: true,
+    },
     children: [
       {
-        path: "/",
-        name: "main",
+        path: '/',
+        name: 'main',
         meta: {
-          breadcrumb: ["Main"],
+          breadcrumb: ['Main'],
         },
-        component: () => import("@/pages/Main.vue"),
+        component: () => import('@/pages/Main.vue'),
       },
     ],
   },
   {
-    path: "/:auth",
-    component: () => import("@/pages/Main.vue"),
+    path: '/:auth',
+    component: () => import('@/pages/AuthMiddleware.vue'),
   },
 ];
 
@@ -38,7 +38,7 @@ router.beforeEach((to, _from, next) => {
   if (to.matched.some((record) => record.meta?.requiresAuth)) {
     const store = useUserStore();
     if (store.token) next();
-    else next("/login");
+    else next('/login');
   }
   next();
 });

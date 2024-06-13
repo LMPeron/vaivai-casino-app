@@ -5,14 +5,19 @@
 
 <script>
 import GameService from '@/service/GameService.js';
+import userStore from '@/stores/user';
+const VITE_APP_HOST_HTTP = import.meta.env.VITE_APP_HOST_HTTP;
+
 export default {
   name: 'Main',
   data() {
     return {
+      loading: false,
       gameService: new GameService(),
       gameList: [],
       loading: false,
       gameUrl: '',
+      userStore: userStore(),
     };
   },
   methods: {
@@ -31,7 +36,7 @@ export default {
       try {
         const response = await this.gameService.open(gameId, 'desktop', {
           deposit_url: 'https://example.com/deposit',
-          return_url: 'https://example.com',
+          return_url: VITE_APP_HOST_HTTP,
         });
         this.gameUrl = response.data.game_url;
       } catch (error) {
@@ -39,7 +44,6 @@ export default {
       }
     },
   },
-
   created() {
     this.loading = true;
     this.getData().finally(() => (this.loading = false));

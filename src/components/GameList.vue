@@ -9,9 +9,9 @@
               class="py-4"
               color="surface-variant"
               rel="noopener noreferrer"
+              @click="$emit('open', game.id)"
               rounded="lg"
               :subtitle="game.identifier"
-              @click="$emit('open', game.id)"
               :title="game.title"
               variant="text"
             >

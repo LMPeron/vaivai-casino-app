@@ -1,17 +1,17 @@
-import { defineStore } from "pinia";
-import { useStorage } from "@vueuse/core";
-import AuthService from "@/service/AuthService.js";
+import { defineStore } from 'pinia';
+import { useStorage } from '@vueuse/core';
+import AuthService from '@/service/AuthService.js';
 
 const store = defineStore({
-  id: "user",
+  id: 'user',
   state: () => ({
-    _user: useStorage("user", {}, undefined, {
+    _user: useStorage('user', {}, undefined, {
       serializer: {
         read: (v) => (v ? JSON.parse(v) : null),
         write: (v) => JSON.stringify(v),
       },
     }),
-    _token: useStorage("token", {}, undefined, {
+    _token: useStorage('token', {}, undefined, {
       serializer: {
         read: (v) => (v ? JSON.parse(v) : null),
         write: (v) => JSON.stringify(v),
@@ -43,8 +43,11 @@ const store = defineStore({
     },
     async renewToken() {
       const response = await AuthService.renewToken();
-      this._user = response.data;
-      this._token = response.token;
+      this._user = response.data?.user;
+      this._token = response.data?.token;
+    },
+    setToken(token) {
+      this._token = token;
     },
   },
 });
