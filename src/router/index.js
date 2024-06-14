@@ -38,7 +38,7 @@ router.beforeEach((to, _from, next) => {
   if (to.matched.some((record) => record.meta?.requiresAuth)) {
     const store = useUserStore();
     if (store.token) next();
-    else next('/login');
+    else window.location.replace('https://pitstopbet.com/?page=cassino');
   }
   next();
 });

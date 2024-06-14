@@ -1,4 +1,5 @@
 <template>
+  <span style="color: black">{{ game.title }}</span>
   <v-card
     style
     class="card"
@@ -32,7 +33,7 @@ export default {
 <style>
 .card {
   background-color: transparent;
-  filter: drop-shadow(2px 4px 20px black) !important;
+  filter: drop-shadow(1px 1px 3px rgb(46, 46, 46)) !important;
 }
 
 @media screen and (min-width: 960px) {

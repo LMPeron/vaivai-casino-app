@@ -13,7 +13,6 @@ export default {
   methods: {
     async getRouteParams() {
       try {
-        debugger;
         const token = this.$route.params.auth;
         if (!token) window.location.replace('https://pitstopbet.com/?page=cassino');
         this.userStore.setToken(token);

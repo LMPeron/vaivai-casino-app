@@ -1,14 +1,16 @@
 <template>
   <Header />
-  <div v-if="!loading">
+  <div v-if="!loading" style="background-color: white">
     <GameList v-if="!gameUrl" :gameList="gameList" @open="openGame($event)" />
     <GameFrame v-else :gameUrl="gameUrl" />
   </div>
+  <AuthApi />
 </template>
 
 <script>
-import GameList from '@/components/GameList.vue';
 import Header from '@/components/Header.vue';
+import AuthApi from '@/components/api/AuthApi.vue';
+import GameList from '@/components/GameList.vue';
 import GameService from '@/service/GameService.js';
 import userStore from '@/stores/user';
 const VITE_APP_HOST_HTTP = import.meta.env.VITE_APP_HOST_HTTP;
@@ -28,6 +30,7 @@ export default {
   components: {
     GameList,
     Header,
+    AuthApi,
   },
   methods: {
     async getGameList() {
