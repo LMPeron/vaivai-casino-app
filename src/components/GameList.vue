@@ -1,14 +1,19 @@
 <template>
   <v-container class="fill-height">
-    <v-responsive class="align-centerfill-height mx-auto" width="900">
-      <v-row>
-        <v-containter v-for="game in gameList" :key="game.id">
-          <v-col cols="12">
-            <Game :game="game" @open="$emit('open', $event)" />
-          </v-col>
-        </v-containter>
-      </v-row>
-    </v-responsive>
+    <v-row no-gutters>
+      <v-col
+        class="px-1 r-height"
+        v-for="game in gameList"
+        :key="game.id"
+        cols="6"
+        xs="6"
+        sm="6"
+        md="4"
+        lg="2"
+      >
+        <Game :game="game" @open="$emit('open', $event)" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -25,3 +30,8 @@ export default {
   },
 };
 </script>
+
+<style>
+.r-height {
+}
+</style>

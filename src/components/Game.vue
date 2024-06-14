@@ -1,15 +1,17 @@
 <template>
   <v-card
-    width="250px"
-    height="130px"
-    class="py-4"
+    style
+    class="card"
     color="surface-variant"
     rel="noopener noreferrer"
-    rounded="lg"
     variant="text"
-    :image="`https://cdn.softswiss.net/i/s2/${game.Provider.reference}/${game.identifier2}.png`"
     @click="$emit('open', game.id)"
   >
+    <img
+      style="width: 100%; height: 100%; border-radius: 5px"
+      :src="`https://cdn.softswiss.net/i/s2/${game.Provider.reference}/${game.identifier2}.png`"
+      alt=""
+    />
   </v-card>
 </template>
 
@@ -26,3 +28,16 @@ export default {
   },
 };
 </script>
+
+<style>
+.card {
+  filter: drop-shadow(2px 4px 20px black) !important;
+}
+
+.card:hover {
+  z-index: 2 !important;
+  transform: scale(1.2);
+  transform-origin: center;
+  transition: transform 0.6s ease-in-out;
+}
+</style>
