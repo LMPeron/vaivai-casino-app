@@ -31,13 +31,16 @@ export default {
 
 <style>
 .card {
+  background-color: transparent;
   filter: drop-shadow(2px 4px 20px black) !important;
 }
 
-.card:hover {
-  z-index: 2 !important;
-  transform: scale(1.2);
-  transform-origin: center;
-  transition: transform 0.6s ease-in-out;
+@media screen and (min-width: 960px) {
+  .card:hover {
+    z-index: 2 !important;
+    transform: scale(1.2);
+    transform-origin: center;
+    transition: transform 0.6s ease-in-out;
+  }
 }
 </style>
