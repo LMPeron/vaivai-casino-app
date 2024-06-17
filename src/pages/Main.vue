@@ -1,8 +1,8 @@
 <template>
-  <Header />
+  <Header v-if="!gameUrl && !loading" />
   <div v-if="!loading" style="background-color: white">
     <GameList v-if="!gameUrl" :gameList="gameList" @open="openGame($event)" />
-    <GameFrame v-else :gameUrl="gameUrl" />
+    <GameFrame v-else :gameUrl="gameUrl" @exit="exitGame()" />
   </div>
   <AuthApi />
 </template>
@@ -44,10 +44,12 @@ export default {
     async getData() {
       await this.getGameList();
     },
+
     async openGame(gameId) {
       try {
         this.loading = true;
-        const response = await this.gameService.open(gameId, 'desktop', {
+        const isMobile = window.innerWidth <= 768;
+        const response = await this.gameService.open(gameId, isMobile ? 'mobile' : 'desktop', {
           deposit_url: 'https://example.com/deposit',
           return_url: VITE_APP_HOST_HTTP,
         });
@@ -57,6 +59,9 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    exitGame() {
+      this.gameUrl = '';
     },
   },
   created() {

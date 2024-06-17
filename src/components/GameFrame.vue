@@ -1,6 +1,12 @@
 <template>
-  <div>
-    <iframe :src="gameUrl" frameborder="0" width="1920" height="1080" allowfullscreen /> 
+  <div style="background-color: black">
+    <iframe
+      :src="gameUrl"
+      frameborder="0"
+      style="width: 100%; height: calc(100vh - 50px)"
+      allowfullscreen
+    />
+    <v-btn @click="$emit('exit')"> Voltar </v-btn>
   </div>
 </template>
 

@@ -1,8 +1,13 @@
 <template>
-  <v-row style="background-color: #ffffff">
+  <v-row class="pl-4 pr-4" style="background-color: #ffffff">
     <v-col>
-      <img cols="4" sm width="100px" src="../assets/logo.png" alt="" />
-      <span style="color: black">{{ userState.user.Wallet.balance }}</span>
+      <img width="100px" src="../assets/logo.png" alt="" />
+    </v-col>
+    <v-col style="align-content: center; text-align: end">
+      <span style="color: black; padding-right: 10px"
+        >R${{ userState.user.Wallet.balance.toFixed(2) }}</span
+      >
+      <v-btn @click="logout"> Sair </v-btn>
     </v-col>
   </v-row>
 </template>
@@ -15,6 +20,11 @@ export default {
     return {
       userState: userStore(),
     };
+  },
+  methods: {
+    logout() {
+      window.location.replace('https://pitstopbet.com/?page=cassino');
+    },
   },
 };
 </script>
