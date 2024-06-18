@@ -1,7 +1,5 @@
 <template>
   <Header v-if="!gameUrl && !loading" />
-
-  
   <div v-if="!loading" style="background-color: rgb(28, 31, 34)">
     <div v-if="!gameUrl && !loading">
       <v-row no-gutters>
@@ -9,22 +7,32 @@
           <v-carousel
             hide-delimiter-background
             show-arrows="hover"
+            continuous
+            cycle
             style="height: 100%; width: 100%"
           >
-            <v-carousel-item src="../assets/banner-1.jpg" cover position="top"></v-carousel-item>
-            <v-carousel-item src="../assets/banner-2.jpg" cover position="top"></v-carousel-item>
-            <v-carousel-item src="../assets/banner-3.jpg" cover position="top"></v-carousel-item>
+            <v-carousel-item
+              lazy-src="../assets/banner-1.jpg"
+              src="../assets/banner-1.jpg"
+              position="top"
+            ></v-carousel-item>
+            <!-- <v-carousel-item
+              lazy-src="../assets/banner-2.jpg"
+              src="../assets/banner-2.jpg"
+              position="top"
+            ></v-carousel-item>
+            <v-carousel-item
+              lazy-src="../assets/banner-3.jpg"
+              src="../assets/banner-3.jpg"
+              position="top"
+            ></v-carousel-item> -->
           </v-carousel>
         </v-col>
       </v-row>
-
-      
-
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
         <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
       </div>
     </div>
-
     <GameFrame v-else :gameUrl="gameUrl" @exit="exitGame()" />
   </div>
   <AuthApi />
