@@ -1,19 +1,26 @@
 <template>
   <Header v-if="!gameUrl && !loading" />
   <div v-if="!loading" style="background-color: rgb(28, 31, 34)">
-    <v-row no-gutters v-if="!gameUrl && !loading">
-      <v-col cols="12">
-        <v-carousel hide-delimiter-background show-arrows="hover" style="height: 100%; width: 100%">
-          <v-carousel-item src="../assets/banner-1.jpg" cover position="top"></v-carousel-item>
-          <v-carousel-item src="../assets/banner-2.jpg" cover position="top"></v-carousel-item>
-          <v-carousel-item src="../assets/banner-3.jpg" cover position="top"></v-carousel-item>
-        </v-carousel>
-      </v-col>
-    </v-row>
+    <div v-if="!gameUrl && !loading">
+      <v-row no-gutters>
+        <v-col cols="12">
+          <v-carousel
+            hide-delimiter-background
+            show-arrows="hover"
+            style="height: 100%; width: 100%"
+          >
+            <v-carousel-item src="../assets/banner-1.jpg" cover position="top"></v-carousel-item>
+            <v-carousel-item src="../assets/banner-2.jpg" cover position="top"></v-carousel-item>
+            <v-carousel-item src="../assets/banner-3.jpg" cover position="top"></v-carousel-item>
+          </v-carousel>
+        </v-col>
+      </v-row>
 
-    <div v-if="!gameUrl" v-for="(gameList, category) in gameCategories">
-      <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
+      <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
+        <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
+      </div>
     </div>
+
     <GameFrame v-else :gameUrl="gameUrl" @exit="exitGame()" />
   </div>
   <AuthApi />
@@ -25,8 +32,7 @@ import AuthApi from '@/components/api/AuthApi.vue';
 import GameList from '@/components/GameList.vue';
 import GameService from '@/service/GameService.js';
 import userStore from '@/stores/user';
-const APP_URL = import.meta.env.APP_URL;
-const MAIN_APP_URL = import.meta.env.MAIN_APP_URL;
+import ENVIROMENT from '@/env';
 
 export default {
   name: 'Main',
@@ -57,14 +63,13 @@ export default {
     async getData() {
       await this.getGameList();
     },
-
     async openGame(gameId) {
       try {
         this.loading = true;
         const isMobile = window.innerWidth <= 768;
         const response = await this.gameService.open(gameId, isMobile ? 'mobile' : 'desktop', {
-          deposit_url: MAIN_APP_URL,
-          return_url: APP_URL,
+          deposit_url: ENVIROMENT.MAIN_APP_URL,
+          return_url: ENVIROMENT.APP_URL,
         });
         this.gameUrl = response.data.game_url;
       } catch (error) {

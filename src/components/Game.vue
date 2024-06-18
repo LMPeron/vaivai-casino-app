@@ -14,7 +14,7 @@
         alt=""
       />
     </v-card>
-    <span style="color: rgb(182, 182, 198); font-size: small;">{{ game.title }}</span>
+    <span style="color: rgb(182, 182, 198); font-size: small">{{ game.title }}</span>
   </div>
 </template>
 
