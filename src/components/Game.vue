@@ -1,19 +1,21 @@
 <template>
-  <span style="color: black">{{ game.title }}</span>
-  <v-card
-    style
-    class="card"
-    color="surface-variant"
-    rel="noopener noreferrer"
-    variant="text"
-    @click="$emit('open', game.id)"
-  >
-    <img
-      style="width: 100%; height: 100%; border-radius: 5px"
-      :src="`https://cdn.softswiss.net/i/s2/${game.Provider.reference}/${game.identifier2}.png`"
-      alt=""
-    />
-  </v-card>
+  <div class="mb-4">
+    <v-card
+      style="margin-bottom: 0"
+      class="card"
+      color="surface-variant"
+      rel="noopener noreferrer"
+      variant="text"
+      @click="$emit('open', game.id)"
+    >
+      <img
+        style="width: 100%; height: 100%; border-radius: 5px"
+        :src="`https://cdn.softswiss.net/i/s2/${game.Provider?.reference}/${game.identifier2}.png`"
+        alt=""
+      />
+    </v-card>
+    <span style="color: rgb(182, 182, 198); font-size: small;">{{ game.title }}</span>
+  </div>
 </template>
 
 <script>

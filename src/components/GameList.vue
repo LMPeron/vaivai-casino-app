@@ -1,6 +1,11 @@
 <template>
   <v-container class="fill-height">
     <v-row no-gutters>
+      <v-col cols="12" class="mb-2">
+        <span class="category-label">
+          {{ category }}
+        </span>
+      </v-col>
       <v-col
         class="px-1 r-height"
         v-for="game in gameList"
@@ -27,11 +32,18 @@ export default {
       type: Array,
       default: () => [],
     },
+    category: {
+      typee: String,
+      default: () => '',
+    },
   },
 };
 </script>
 
 <style>
-.r-height {
+.category-label {
+  text-transform: capitalize;
+  font-weight: 700;
+  font-size: x-large;
 }
 </style>

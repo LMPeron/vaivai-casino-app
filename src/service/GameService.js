@@ -10,6 +10,15 @@ export default class GameService {
       });
   }
 
+  async getAllSorted() {
+    return http
+      .get(`/sorted`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
   async open(gameId, clientType, urls) {
     return http
       .post(`/api/session`, {
