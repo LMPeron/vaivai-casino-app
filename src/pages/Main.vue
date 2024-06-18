@@ -1,5 +1,7 @@
 <template>
   <Header v-if="!gameUrl && !loading" />
+
+  
   <div v-if="!loading" style="background-color: rgb(28, 31, 34)">
     <div v-if="!gameUrl && !loading">
       <v-row no-gutters>

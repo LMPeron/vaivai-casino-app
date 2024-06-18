@@ -1,6 +1,6 @@
 <template>
   <v-row
-    class="pl-4 pr-4"
+    class="pl-4 pr-4 mr-0 ml-0"
     style="background: linear-gradient(90.59deg, rgb(70, 158, 98) -2.73%, rgb(1, 123, 39) 73.29%)"
   >
     <v-col cols="1" style="align-content: center; display: flex">
@@ -16,7 +16,6 @@
       <span style="color: white; font-weight: 800; font-size: larger"
         >R$ {{ userState.user.Wallet.balance.toFixed(2) }}</span
       >
-      <!-- <v-btn @click="logout"> Sair </v-btn> -->
     </v-col>
   </v-row>
 </template>
