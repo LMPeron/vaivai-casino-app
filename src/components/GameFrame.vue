@@ -1,6 +1,5 @@
 <template>
   <div style="background-color: black">
-    {{ height }}
     <iframe
       :src="gameUrl"
       frameborder="0"
@@ -14,18 +13,33 @@
 <script>
 export default {
   name: 'GameFrame',
+  data() {
+    return {
+      windowHeight: window.innerHeight,
+    };
+  },
   props: {
     gameUrl: {
       type: String,
       required: true,
     },
   },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
+  },
+  methods: {
+    onResize() {
+      this.windowHeight = window.innerHeight;
+    },
+  },
   computed: {
     height() {
-      return `${window.innerHeight - 50}px`;
-    },
-    width() {
-      return `${window.innerWidth}px`;
+      return `${this.windowHeight - 50}px`;
     },
   },
 };
