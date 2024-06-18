@@ -19,6 +19,28 @@ export default class GameService {
       });
   }
 
+  async favorite(gameId) {
+    return http
+      .post(`/favorite`, {
+        gameId: gameId,
+      })
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
+  async unfavorite(gameId) {
+    return http
+      .post(`/unfavorite`, {
+        gameId: gameId,
+      })
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
   async open(gameId, clientType, urls) {
     return http
       .post(`/api/session`, {

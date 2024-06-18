@@ -16,6 +16,8 @@
         </v-col>
       </v-row>
 
+      
+
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
         <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
       </div>
