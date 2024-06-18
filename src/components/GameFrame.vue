@@ -1,5 +1,6 @@
 <template>
   <div style="background-color: black">
+    {{ height }}
     <iframe
       :src="gameUrl"
       frameborder="0"
