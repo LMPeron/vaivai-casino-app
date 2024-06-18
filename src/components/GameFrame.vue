@@ -3,7 +3,7 @@
     <iframe
       :src="gameUrl"
       frameborder="0"
-      :style="{ width: `${width}px`, height: `${height - 50}px` }"
+      :style="{ width: '100%', height: height }"
       allowfullscreen
     />
     <v-btn @click="$emit('exit')"> Voltar </v-btn>
@@ -21,10 +21,10 @@ export default {
   },
   computed: {
     height() {
-      return window.innerHeight;
+      return `${window.innerHeight - 50}px`;
     },
     width() {
-      return window.innerWidth;
+      return `${window.innerWidth}px`;
     },
   },
 };
