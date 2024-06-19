@@ -3,7 +3,7 @@ import http from '@/http-common';
 export default class GameService {
   async getAll() {
     return http
-      .get(`/`)
+      .get(`/api/game`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -12,7 +12,7 @@ export default class GameService {
 
   async getAllSorted() {
     return http
-      .get(`/sorted`)
+      .get(`/api/game/sorted`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -21,7 +21,7 @@ export default class GameService {
 
   async favorite(gameId) {
     return http
-      .post(`/favorite`, {
+      .post(`/api/game/favorite`, {
         gameId: gameId,
       })
       .then((r) => r.data)
@@ -32,21 +32,8 @@ export default class GameService {
 
   async unfavorite(gameId) {
     return http
-      .post(`/unfavorite`, {
+      .post(`/api/game/unfavorite`, {
         gameId: gameId,
-      })
-      .then((r) => r.data)
-      .catch((e) => {
-        throw e.response.data || e;
-      });
-  }
-
-  async open(gameId, clientType, urls) {
-    return http
-      .post(`/api/session`, {
-        gameId: gameId,
-        clientType: clientType,
-        urls: urls,
       })
       .then((r) => r.data)
       .catch((e) => {

@@ -45,6 +45,7 @@ import GameList from '@/components/GameList.vue';
 import GameService from '@/service/GameService.js';
 import userStore from '@/stores/user';
 import ENVIROMENT from '@/env';
+import SoftSwissService from '@/service/SoftSwissService';
 
 export default {
   name: 'Main',
@@ -52,6 +53,7 @@ export default {
     return {
       loading: false,
       gameService: new GameService(),
+      softswissService: new SoftSwissService(),
       gameCategories: [],
       loading: false,
       gameUrl: '',
@@ -79,7 +81,7 @@ export default {
       try {
         this.loading = true;
         const isMobile = window.innerWidth <= 768;
-        const response = await this.gameService.open(gameId, isMobile ? 'mobile' : 'desktop', {
+        const response = await this.softswissService.open(gameId, isMobile ? 'mobile' : 'desktop', {
           deposit_url: ENVIROMENT.MAIN_APP_URL,
           return_url: ENVIROMENT.APP_URL,
         });
