@@ -18,7 +18,6 @@
 import Header from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import AuthApi from '@/components/api/AuthApi.vue';
-import Footer from '@/components/Footer.vue';
 
 export default {
   name: 'Main',
@@ -59,7 +58,6 @@ export default {
     };
   },
   components: {
-    Footer,
     Header,
     Sidebar,
     AuthApi,
