@@ -55,14 +55,6 @@ export default {
           { title: 'Crash', icon: 'mdi-poker-chip', value: 'crash' },
           { title: 'Craps', icon: 'mdi-flash', value: 'craps' },
         ],
-        // Esportes: [
-        //   { id: 3, title: 'Zelda', icon: 'mdi-sword-cross' },
-        //   {
-        //     id: 4,
-        //     title: 'Tomb Raider',
-        //     icon: 'mdi-hat-fedora',
-        //   },
-        // ],
       },
     };
   },

@@ -28,8 +28,7 @@
         <!-- <RegisterModal />
         <LoginModal /> -->
       </div>
-      <div v-else class="d-flex justify-end">
-        <depositModal />
+      <div v-else class="justify-end">
         <span
           class="pr-4"
           style="color: white; font-weight: 800; font-size: larger; align-content: center"
