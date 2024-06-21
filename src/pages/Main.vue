@@ -1,34 +1,9 @@
 <template>
-  <Header v-if="!gameUrl && !loading" />
-  <div v-if="!loading" style="background-color: rgb(28, 31, 34)">
+  <!-- <Header v-if="!gameUrl && !loading" /> -->
+  <div v-if="!loading" style="background-color: rgb(28, 31, 34); width: 100%">
     <div v-if="!gameUrl && !loading">
-      <v-row no-gutters>
-        <v-col cols="12">
-          <v-carousel
-            hide-delimiter-background
-            show-arrows="hover"
-            continuous
-            cycle
-            style="height: 100%; width: 100%"
-          >
-            <v-carousel-item
-              lazy-src="../assets/banner-1.jpg"
-              src="../assets/banner-1.jpg"
-              position="top"
-            ></v-carousel-item>
-            <!-- <v-carousel-item
-              lazy-src="../assets/banner-2.jpg"
-              src="../assets/banner-2.jpg"
-              position="top"
-            ></v-carousel-item>
-            <v-carousel-item
-              lazy-src="../assets/banner-3.jpg"
-              src="../assets/banner-3.jpg"
-              position="top"
-            ></v-carousel-item> -->
-          </v-carousel>
-        </v-col>
-      </v-row>
+      <Carousel />
+      <!-- <Top /> -->
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
         <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
       </div>
@@ -41,9 +16,10 @@
 <script>
 import Header from '@/components/Header.vue';
 import AuthApi from '@/components/api/AuthApi.vue';
+import Carousel from '@/components/Carousel.vue';
+import Top from '@/components/Top.vue';
 import GameList from '@/components/GameList.vue';
 import GameService from '@/service/GameService.js';
-import userStore from '@/stores/user';
 import ENVIROMENT from '@/env';
 import SoftSwissService from '@/service/SoftSwissService';
 
@@ -55,15 +31,15 @@ export default {
       gameService: new GameService(),
       softswissService: new SoftSwissService(),
       gameCategories: [],
-      loading: false,
       gameUrl: '',
-      userStore: userStore(),
     };
   },
   components: {
     GameList,
     Header,
     AuthApi,
+    Carousel,
+    Top,
   },
   methods: {
     async getGameList() {

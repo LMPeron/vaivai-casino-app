@@ -2,9 +2,7 @@
   <v-container class="fill-height">
     <v-row no-gutters>
       <v-col cols="12" class="mb-2">
-        <span class="category-label">
-          {{ category }}
-        </span>
+        <span class="category-label"> Top 10 </span>
       </v-col>
       <v-col
         class="px-1 r-height"
@@ -23,8 +21,6 @@
 </template>
 
 <script>
-import Game from '@/components/Game.vue';
-
 export default {
   data() {
     return {};
@@ -34,13 +30,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    category: {
-      typee: String,
-      default: () => '',
-    },
-  },
-  components: {
-    Game,
   },
 };
 </script>

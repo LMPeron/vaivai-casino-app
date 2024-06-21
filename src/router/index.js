@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
-// import AppLayout from "@/layout/AppLayout.vue";
+import AppLayout from '@/layouts/AppLayout.vue';
 import useUserStore from '@/stores/user.js';
 
 const routes = [
   {
     path: '/',
-    // component: AppLayout,
+    component: AppLayout,
     meta: {
       requiresAuth: true,
     },
