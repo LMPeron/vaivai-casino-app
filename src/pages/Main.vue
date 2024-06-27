@@ -1,5 +1,4 @@
 <template>
-  <!-- <Header v-if="!gameUrl && !loading" /> -->
   <div v-if="!loading" style="background-color: rgb(28, 31, 34); width: 100%">
     <div v-if="!gameUrl && !loading">
       <Carousel />
@@ -24,7 +23,7 @@ import ENVIROMENT from '@/env';
 import SoftSwissService from '@/service/SoftSwissService';
 
 export default {
-  name: 'Main',
+  name: 'main-page',
   data() {
     return {
       loading: false,

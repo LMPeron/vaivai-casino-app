@@ -24,6 +24,10 @@ const routes = [
     path: '/:auth',
     component: () => import('@/pages/AuthMiddleware.vue'),
   },
+  {
+    path: '/ortiz',
+    component: () => import('@/pages/OrtizTest.vue'),
+  },
 ];
 
 const router = createRouter({
