@@ -1,8 +1,9 @@
 <template>
   <div class="container">
-    <Header v-if="!gameUrl && !loading" @toggle-sidebar="toggleSidebar" />
+    <Header v-if="!appState.running && !loading" @toggle-sidebar="toggleSidebar" />
     <div class="layout">
       <Sidebar
+        v-if="!appState.running"
         class="d-none d-md-block"
         :sidebarCategories="sidebarCategories"
         :isOpen="isSidebarOpen"
@@ -18,13 +19,14 @@
 import Header from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import AuthApi from '@/components/api/AuthApi.vue';
+import appStore from '@/stores/app';
 
 export default {
   name: 'Main',
   data() {
     return {
+      appState: appStore(),
       loading: false,
-
       isSidebarOpen: false,
       sidebarCategories: {
         Cassino: [

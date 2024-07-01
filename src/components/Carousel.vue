@@ -6,7 +6,7 @@
         show-arrows="hover"
         continuous
         cycle
-        style="height: 100%; width: 100%"
+        style="height: 100%; width: 100%;"
       >
         <v-carousel-item
           lazy-src="../assets/banner-1.jpg"

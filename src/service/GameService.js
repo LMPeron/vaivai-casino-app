@@ -19,6 +19,24 @@ export default class GameService {
       });
   }
 
+  async getTop() {
+    return http
+      .get(`/api/game/top`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
+  async getBingo() {
+    return http
+      .get(`/api/game/bingo`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
   async favorite(gameId) {
     return http
       .post(`/api/game/favorite`, {

@@ -2,15 +2,16 @@
   <div v-if="!loading" style="background-color: rgb(28, 31, 34); width: 100%">
     <div v-if="!runningGame">
       <Carousel />
-      <!-- <Top /> -->
+      <Top :gameList="topGameList" @open="openGame($event)" />
+      <Bingo :gameList="bingoGameList" @open="openGame($event)" />
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
         <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
       </div>
     </div>
 
     <div v-else>
-      <GameFrame v-if="softswissGameUrl" :gameUrl="softswissGameUrl" @exit="exitGame()" />
-      <GameFrame v-else-if="ortizGameHTML" :gameUrl="gameUrl" @exit="exitGame()" />
+      <SoftswissFrame v-if="softswissGameUrl" :gameUrl="softswissGameUrl" @exit="exitGame()" />
+      <OrtizFrame v-else-if="ortizGameHTML" :html="ortizGameHTML" @exit="exitGame()" />
     </div>
   </div>
   <AuthApi />
@@ -21,20 +22,27 @@ import SoftSwissService from '@/service/SoftSwissService';
 import OrtizService from '@/service/OrtizService.js';
 import AuthApi from '@/components/api/AuthApi.vue';
 import Carousel from '@/components/Carousel.vue';
-// import Top from '@/components/Top.vue';
+import Top from '@/components/Top.vue';
+import Bingo from '@/components/Bingo.vue';
 import GameList from '@/components/GameList.vue';
 import GameService from '@/service/GameService.js';
 import ENVIROMENT from '@/env';
+import OrtizFrame from '@/components/OrtizFrame.vue';
+import SoftswissFrame from '@/components/SoftswissFrame.vue';
+import appStore from '@/stores/app';
 
 export default {
   name: 'main-page',
   data() {
     return {
+      appState: appStore(),
       loading: false,
       gameService: new GameService(),
       softswissService: new SoftSwissService(),
       ortizService: new OrtizService(),
       gameCategories: [],
+      topGameList: [],
+      bingoGameList: [],
       softswissGameUrl: '',
       ortizGameHTML: '',
     };
@@ -43,11 +51,16 @@ export default {
     GameList,
     AuthApi,
     Carousel,
-    // Top,
+    Top,
+    Bingo,
+    OrtizFrame,
+    SoftswissFrame,
   },
   methods: {
     async getData() {
       await this.getGameList();
+      await this.getTopGameList();
+      await this.getBingoGameList();
     },
     async getGameList() {
       try {
@@ -57,7 +70,24 @@ export default {
         console.log(error);
       }
     },
+    async getTopGameList() {
+      try {
+        const response = await this.gameService.getTop();
+        this.topGameList = response.data?.gameList;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getBingoGameList() {
+      try {
+        const response = await this.gameService.getBingo();
+        this.bingoGameList = response.data?.gameList;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async openGame(game) {
+      this.appState.setRunning(true);
       if (game.Provider?.Platform?.reference === 'softswiss') await this.openSoftswissGame(game.id);
       else if (game.Provider?.Platform?.reference === 'ortiz') await this.openOrtizGame(game.id);
     },
@@ -71,6 +101,7 @@ export default {
         });
         this.softswissGameUrl = response.data.game_url;
       } catch (error) {
+        this.appState.setRunning(false);
         console.log(error);
       } finally {
         this.loading = false;
@@ -80,24 +111,28 @@ export default {
       try {
         this.loading = true;
         const response = await this.ortizService.launch(gameId);
-        this.gameHTML = response.data;
+        this.ortizGameHTML = response.data;
       } catch (error) {
+        this.appState.setRunning(false);
         console.log(error);
       } finally {
         this.loading = false;
       }
     },
     exitGame() {
-      this.gameUrl = '';
+      this.softswissGameUrl = '';
+      this.ortizGameHTML = '';
+      this.appState.setRunning(false);
     },
   },
   computed: {
     runningGame() {
-      return this.gameUrl || this.gameHTML;
+      return this.softswissGameUrl || this.ortizGameHTML;
     },
   },
   created() {
     this.loading = true;
+    this.appState.setRunning(false);
     this.getData().finally(() => (this.loading = false));
   },
 };
