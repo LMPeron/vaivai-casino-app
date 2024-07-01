@@ -6,11 +6,15 @@
       color="surface-variant"
       rel="noopener noreferrer"
       variant="text"
-      @click="$emit('open', game.id)"
+      @click="$emit('open', game)"
     >
       <img
         style="width: 100%; height: 100%; border-radius: 5px"
-        :src="`https://cdn.softswiss.net/i/s2/${game.Provider?.reference}/${game.identifier2}.png`"
+        :src="
+          game.Provider?.Platform?.reference === 'softswiss'
+            ? `https://cdn.softswiss.net/i/s2/${game.Provider?.reference}/${game.identifier2}.png`
+            : game.imgUrl
+        "
         alt=""
       />
     </v-card>
