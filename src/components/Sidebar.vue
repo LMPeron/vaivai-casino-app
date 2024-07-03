@@ -2,13 +2,23 @@
   <div :class="['sidebar', { 'is-closed': !isOpen }]">
     <div v-if="isOpen" class="sidebar-content">
       <v-expansion-panels elevation="0">
-        <v-expansion-panel v-for="(games, category) in sidebarCategories" :key="category">
+        <v-expansion-panel
+          v-for="(games, category) in sidebarCategories"
+          :key="category"
+          style="cursor: pointer"
+        >
           <template v-slot:title>
             {{ category }}
           </template>
           <template v-slot:default>
             <v-list lines="one">
-              <v-list-item v-for="game in games" :key="game.id" :title="game.title">
+              <v-list-item
+                v-for="game in games"
+                :key="game.id"
+                :title="game.title"
+                style="cursor: pointer"
+                @click="$router.push(`/${game.value}`)"
+              >
                 <template v-slot:prepend>
                   <v-icon>{{ game.icon }}</v-icon>
                 </template>
@@ -31,7 +41,8 @@
                       icon
                       v-bind="attrs"
                       v-on="on"
-                      style="background-color: #111415"
+                      style="background-color: #111415; cursor: pointer"
+                      @click="$router.push(`/${game.value}`)"
                     >
                       <v-icon style="color: #b5b3b1">{{ game.icon }}</v-icon>
                     </v-btn>

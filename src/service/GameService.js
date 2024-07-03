@@ -19,6 +19,15 @@ export default class GameService {
       });
   }
 
+  async getAllSortedByCategory(category) {
+    return http
+      .get(`/api/game/sorted/${category}`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
   async getTop() {
     return http
       .get(`/api/game/top`)

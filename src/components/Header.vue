@@ -41,11 +41,11 @@
               <span class="pl-2" style="display: block"> {{ userState.user.name }} </span>
             </v-btn>
           </template>
-          <v-list>
+          <!-- <v-list>
             <v-list-item v-for="(item, index) in items" :key="index" :value="index">
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
-          </v-list>
+          </v-list> -->
         </v-menu>
       </div>
     </v-col>
@@ -71,12 +71,12 @@ export default {
       windowWidth: window.innerWidth,
       isAuth: true,
       items: [
-        { title: 'Carteira' },
-        { title: 'Indicações' },
-        { title: 'Dados da Conta' },
-        { title: 'Alterar senha' },
-        { title: 'Suporte' },
-        { title: 'Sair' },
+        // { title: 'Carteira' },
+        // { title: 'Indicações' },
+        // { title: 'Dados da Conta' },
+        // { title: 'Alterar senha' },
+        // { title: 'Suporte' },
+        // { title: 'Sair' },
       ],
     };
   },

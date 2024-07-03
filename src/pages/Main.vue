@@ -1,14 +1,13 @@
 <template>
-  <div v-if="!loading" style="background-color: rgb(28, 31, 34); width: 100%">
+  <div style="background-color: rgb(28, 31, 34); width: 100%">
     <div v-if="!runningGame">
       <Carousel />
-      <Top :gameList="topGameList" @open="openGame($event)" />
-      <Bingo :gameList="bingoGameList" @open="openGame($event)" />
+      <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
+      <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
         <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
       </div>
     </div>
-
     <div v-else>
       <SoftswissFrame v-if="softswissGameUrl" :gameUrl="softswissGameUrl" @exit="exitGame()" />
       <OrtizFrame v-else-if="ortizGameHTML" :html="ortizGameHTML" @exit="exitGame()" />
@@ -30,12 +29,14 @@ import ENVIROMENT from '@/env';
 import OrtizFrame from '@/components/OrtizFrame.vue';
 import SoftswissFrame from '@/components/SoftswissFrame.vue';
 import appStore from '@/stores/app';
+import userStore from '@/stores/user';
 
 export default {
   name: 'main-page',
   data() {
     return {
       appState: appStore(),
+      userState: userStore(),
       loading: false,
       gameService: new GameService(),
       softswissService: new SoftSwissService(),
@@ -45,6 +46,7 @@ export default {
       bingoGameList: [],
       softswissGameUrl: '',
       ortizGameHTML: '',
+      selectedCategory: '',
     };
   },
   components: {
@@ -64,7 +66,10 @@ export default {
     },
     async getGameList() {
       try {
-        const response = await this.gameService.getAllSorted();
+        let response;
+        if (this.selectedCategory && this.selectedCategory !== 'all')
+          response = await this.gameService.getAllSortedByCategory(this.selectedCategory);
+        else response = await this.gameService.getAllSorted();
         this.gameCategories = response.data?.categories;
       } catch (error) {
         console.log(error);
@@ -122,16 +127,31 @@ export default {
     exitGame() {
       this.softswissGameUrl = '';
       this.ortizGameHTML = '';
+      this.userState.renewToken();
       this.appState.setRunning(false);
+    },
+    getRouteParams() {
+      this.selectedCategory = this.$route.params.category;
     },
   },
   computed: {
     runningGame() {
       return this.softswissGameUrl || this.ortizGameHTML;
     },
+    showAll() {
+      return this.selectedCategory === '' || this.selectedCategory === 'all';
+    },
+  },
+  watch: {
+    $route(to, from) {
+      this.loading = true;
+      this.getRouteParams();
+      this.getGameList().finally(() => (this.loading = false));
+    },
   },
   created() {
     this.loading = true;
+    this.getRouteParams();
     this.appState.setRunning(false);
     this.getData().finally(() => (this.loading = false));
   },

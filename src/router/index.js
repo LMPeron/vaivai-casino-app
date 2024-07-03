@@ -18,6 +18,14 @@ const routes = [
         },
         component: () => import('@/pages/Main.vue'),
       },
+      {
+        path: '/:category',
+        name: 'main',
+        meta: {
+          breadcrumb: ['Main'],
+        },
+        component: () => import('@/pages/Main.vue'),
+      },
     ],
   },
   {
@@ -27,6 +35,14 @@ const routes = [
   {
     path: '/ortiz',
     component: () => import('@/pages/OrtizTest.vue'),
+  },
+  {
+    path: '/admin',
+    component: () => import('@/pages/Admin.vue'),
+  },
+  {
+    path: '/admin/auth',
+    component: () => import('@/pages/AdminLogin.vue'),
   },
 ];
 
