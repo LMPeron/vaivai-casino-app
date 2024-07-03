@@ -11,15 +11,7 @@ const routes = [
     },
     children: [
       {
-        path: '/',
-        name: 'main',
-        meta: {
-          breadcrumb: ['Main'],
-        },
-        component: () => import('@/pages/Main.vue'),
-      },
-      {
-        path: '/:category',
+        path: 'game/:category',
         name: 'main',
         meta: {
           breadcrumb: ['Main'],

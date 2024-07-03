@@ -4,19 +4,19 @@
     <div class="layout">
       <Sidebar
         v-if="!appState.running"
-        class="d-none d-md-block"
         :sidebarCategories="sidebarCategories"
         :isOpen="isSidebarOpen"
       />
       <router-view></router-view>
     </div>
-
+    <Footer />
     <AuthApi />
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header.vue';
+import Footer from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import AuthApi from '@/components/api/AuthApi.vue';
 import appStore from '@/stores/app';
@@ -29,17 +29,21 @@ export default {
       loading: false,
       isSidebarOpen: false,
       sidebarCategories: {
-        Cassino: [
+        Favoritos: [
           {
             title: 'Favoritos',
             icon: 'mdi-star',
             value: 'favorites',
           },
+        ],
+        'Todos os jogos': [
           {
             title: 'Todos os jogos',
             icon: 'mdi-gamepad-square-outline',
             value: 'all',
           },
+        ],
+        Cassino: [
           {
             title: 'Slots',
             icon: 'mdi-slot-machine',
@@ -63,12 +67,21 @@ export default {
     Header,
     Sidebar,
     AuthApi,
+    Footer,
   },
   methods: {
     toggleSidebar() {
-      console.log('Sidebar toggle event received' + this.isSidebarOpen);
       this.isSidebarOpen = !this.isSidebarOpen;
     },
+    isMobile() {
+      return window.innerWidth <= 768;
+    },
+  },
+
+  mounted() {
+    if (!this.isMobile()) {
+      this.isSidebarOpen = true;
+    }
   },
 };
 </script>

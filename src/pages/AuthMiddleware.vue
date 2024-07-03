@@ -17,7 +17,7 @@ export default {
         if (!token) window.location.replace('https://pitstopbet.com/?page=cassino');
         this.userStore.setToken(token);
         await this.userStore.renewToken();
-        this.$router.push('/');
+        this.$router.push('/game/all');
       } catch (error) {
         console.log(error);
       }
