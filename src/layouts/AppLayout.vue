@@ -9,7 +9,7 @@
       />
       <router-view></router-view>
     </div>
-    <Footer />
+    <Footer v-if="!appState.running" />
     <AuthApi />
   </div>
 </template>
