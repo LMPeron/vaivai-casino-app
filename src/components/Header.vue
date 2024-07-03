@@ -6,15 +6,35 @@
       margin-left: 0px;
     "
   >
-    <v-col style="margin-bottom: 0; margin: 0" cols="4" xs="1" sm="4" md="4" lg="8">
+    <v-col style="margin-bottom: 0; margin: 0" cols="4" xs="1" sm="4" md="4" lg="2">
       <div class="d-flex">
         <v-btn style="align-self: center" variant="text" icon @click="toggle()">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
-        <div class="d-flex align-center" style="cursor: pointer" @click="redirect()">
+        <div
+          class="d-flex align-center"
+          style="cursor: pointer"
+          @click="redirect('https://pitstopbet.com/?page=cassino')"
+        >
           <img class="pl-2" :width="isMobile ? '50px' : '100px '" src="../assets/logo.png" alt="" />
         </div>
       </div>
+    </v-col>
+
+    <v-col v-if="showHeader" class="headerOptions" cols="4" lg="6">
+      <span
+        class="pl-4"
+        style="cursor: pointer; font-size: medium"
+        @click="$router.push('/game/all')"
+        >CASSINOS</span
+      >
+      <span
+        class="pl-4"
+        style="cursor: pointer; font-size: medium"
+        @click="redirect('https://pitstopbet.com/?page=cassino')"
+        >LOTERIA</span
+      >
+      <span class="pl-4" style="cursor: pointer; font-size: medium">ESPORTES</span>
     </v-col>
 
     <v-col cols="8" md="8" lg="4" sm="8" sx="2" style="align-content: center; text-align: end">
@@ -110,13 +130,16 @@ export default {
     handleShowBalance() {
       this.showBalance = !this.showBalance;
     },
-    redirect() {
-      window.location.replace('https://pitstopbet.com/?page=cassino');
+    redirect(url) {
+      window.location.replace(url);
     },
   },
   computed: {
     isMobile() {
       return this.windowWidth <= 960;
+    },
+    showHeader() {
+      return this.windowWidth >= 1280;
     },
   },
 };
@@ -125,6 +148,10 @@ export default {
 <style>
 .option {
   cursor: pointer;
+}
+
+.headerOptions {
+  align-content: center;
 }
 </style>
 
