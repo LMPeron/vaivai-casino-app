@@ -10,11 +10,17 @@
         cycle
       >
         <v-carousel-item
-          lazy-src="../assets/banner-1.jpg"
-          src="../assets/banner-1.jpg"
+          lazy-src="../assets/banner-1-g.jpg"
+          src="../assets/banner-1-g.jpg"
           position="top"
         ></v-carousel-item>
-        
+
+        <v-carousel-item
+          lazy-src="../assets/banner-1-m.jpg"
+          src="../assets/banner-1-m.jpg"
+          position="top"
+        ></v-carousel-item>
+
         <!-- <v-carousel-item
           v-if="screenSize === 'g'"
           lazy-src="`../assets/banner01g.jpg`"
