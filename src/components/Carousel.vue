@@ -16,8 +16,20 @@
         ></v-carousel-item>
 
         <v-carousel-item
-          lazy-src="../assets/banner-1-m.jpg"
-          src="../assets/banner-1-m.jpg"
+          lazy-src="../assets/banner-2-m.png"
+          src="../assets/banner-2-m.png"
+          position="top"
+        ></v-carousel-item>
+
+        <v-carousel-item
+          lazy-src="../assets/banner-3-m.png"
+          src="../assets/banner-3-m.png"
+          position="top"
+        ></v-carousel-item>
+
+        <v-carousel-item
+          lazy-src="../assets/banner-4-m.png"
+          src="../assets/banner-4-m.png"
           position="top"
         ></v-carousel-item>
 
