@@ -28,62 +28,62 @@
           position="top"
         ></v-carousel-item>
 
-        <!-- <v-carousel-item
+        <v-carousel-item
           v-if="screenSize === 'g'"
-          lazy-src="`../assets/banner/banner02g.png`"
-          src="`../assets/banner/banner02g.png`"
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner02g.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner02g.jpg"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else-if="screenSize === 'm'"
-          lazy-src="`../assets/banner/banner02m.jpg`"
-          src="`../assets/banner/banner02m.jpg`"
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner02m.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner02m.jpg"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else
-          lazy-src="`../assets/banner/banner02p.jpg`"
-          src="`../assets/banner/banner02p.jpg`"
-          position="top"
-        ></v-carousel-item> -->
-
-        <!-- <v-carousel-item
-          v-if="screenSize === 'g'"
-          lazy-src="`../assets/banner/banner03g.png`"
-          src="`../assets/banner/banner03g.png`"
-          position="top"
-        ></v-carousel-item>
-        <v-carousel-item
-          v-else-if="screenSize === 'm'"
-          lazy-src="`../assets/banner/banner03m.jpg`"
-          src="`../assets/banner/banner03m.jpg`"
-          position="top"
-        ></v-carousel-item>
-        <v-carousel-item
-          v-else
-          lazy-src="`../assets/banner/banner03p.jpg`"
-          src="`../assets/banner/banner03p.jpg`"
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner02p.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner02p.jpg"
           position="top"
         ></v-carousel-item>
 
         <v-carousel-item
           v-if="screenSize === 'g'"
-          lazy-src="`../assets/banner/banner04g.png`"
-          src="`../assets/banner/banner04g.png`"
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner03g.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner03g.jpg"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else-if="screenSize === 'm'"
-          lazy-src="`../assets/banner/banner04m.jpg`"
-          src="`../assets/banner/banner04m.jpg`"
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner03m.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner03m.jpg"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else
-          lazy-src="`../assets/banner/banner04p.jpg`"
-          src="`../assets/banner/banner04p.jpg`"
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner03p.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner03p.jpg"
           position="top"
-        ></v-carousel-item> -->
+        ></v-carousel-item>
+
+        <v-carousel-item
+          v-if="screenSize === 'g'"
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner04g.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner04g.jpg"
+          position="top"
+        ></v-carousel-item>
+        <v-carousel-item
+          v-else-if="screenSize === 'm'"
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner04m.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner04m.jpg"
+          position="top"
+        ></v-carousel-item>
+        <v-carousel-item
+          v-else
+          lazy-src="https://vaivaibet.com/assets/img/cassino/banner04p.jpg"
+          src="https://vaivaibet.com/assets/img/cassino/banner04p.jpg"
+          position="top"
+        ></v-carousel-item>
 
         <!-- <template v-for="banner in bannerList" :key="banner.url">
           <v-carousel-item
