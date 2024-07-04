@@ -47,7 +47,7 @@
           position="top"
         ></v-carousel-item> -->
 
-        <v-carousel-item
+        <!-- <v-carousel-item
           v-if="screenSize === 'g'"
           lazy-src="`../assets/banner/banner03g.png`"
           src="`../assets/banner/banner03g.png`"
@@ -83,7 +83,7 @@
           lazy-src="`../assets/banner/banner04p.jpg`"
           src="`../assets/banner/banner04p.jpg`"
           position="top"
-        ></v-carousel-item>
+        ></v-carousel-item> -->
 
         <!-- <template v-for="banner in bannerList" :key="banner.url">
           <v-carousel-item
