@@ -9,7 +9,7 @@
         continuous
         cycle
       >
-        <v-carousel-item
+        <!-- <v-carousel-item
           v-if="screenSize === 'g'"
           lazy-src="`../assets/banner/banner01g.jpg`"
           src="`../assets/banner/banner01g.jpg`"
@@ -26,61 +26,61 @@
           lazy-src="`../assets/banner/banner01g.jpg`"
           src="`../assets/banner/banner01p.jpg`"
           position="top"
-        ></v-carousel-item>
+        ></v-carousel-item> -->
 
         <v-carousel-item
           v-if="screenSize === 'g'"
-          lazy-src="`../assets/banner/banner01g.jpg`"
-          src="`../assets/banner/banner02g.jpg`"
+          lazy-src="`../assets/banner/banner02g.png`"
+          src="`../assets/banner/banner02g.png`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else-if="screenSize === 'm'"
-          lazy-src="`../assets/banner/banner01g.jpg`"
+          lazy-src="`../assets/banner/banner02m.jpg`"
           src="`../assets/banner/banner02m.jpg`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else
-          lazy-src="`../assets/banner/banner01g.jpg`"
+          lazy-src="`../assets/banner/banner02p.jpg`"
           src="`../assets/banner/banner02p.jpg`"
           position="top"
         ></v-carousel-item>
 
         <v-carousel-item
           v-if="screenSize === 'g'"
-          lazy-src="`../assets/banner/banner03g.jpg`"
-          src="`../assets/banner/banner03g.jpg`"
+          lazy-src="`../assets/banner/banner03g.png`"
+          src="`../assets/banner/banner03g.png`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else-if="screenSize === 'm'"
-          lazy-src="`../assets/banner/banner03g.jpg`"
+          lazy-src="`../assets/banner/banner03m.jpg`"
           src="`../assets/banner/banner03m.jpg`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else
-          lazy-src="`../assets/banner/banner03g.jpg`"
+          lazy-src="`../assets/banner/banner03p.jpg`"
           src="`../assets/banner/banner03p.jpg`"
           position="top"
         ></v-carousel-item>
 
         <v-carousel-item
           v-if="screenSize === 'g'"
-          lazy-src="`../assets/banner/banner04g.jpg`"
-          src="`../assets/banner/banner04g.jpg`"
+          lazy-src="`../assets/banner/banner04g.png`"
+          src="`../assets/banner/banner04g.png`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else-if="screenSize === 'm'"
-          lazy-src="`../assets/banner/banner04g.jpg`"
+          lazy-src="`../assets/banner/banner04m.jpg`"
           src="`../assets/banner/banner04m.jpg`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else
-          lazy-src="`../assets/banner/banner04g.jpg`"
+          lazy-src="`../assets/banner/banner04p.jpg`"
           src="`../assets/banner/banner04p.jpg`"
           position="top"
         ></v-carousel-item>
