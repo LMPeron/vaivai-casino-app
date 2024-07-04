@@ -17,20 +17,20 @@
 
         <v-carousel-item
           v-if="screenSize === 'g'"
-          lazy-src="`../assets/banner01g.jpg`"
-          src="`../assets/banner01g.jpg`"
+          lazy-src="`../assets/banner-1-g.jpg`"
+          src="`../assets/banner-1-g.jpg`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else-if="screenSize === 'm'"
-          lazy-src="`../assets/banner01g.jpg`"
-          src="`../assets/banner01m.jpg`"
+          lazy-src="`../assets/banner-1-g.jpg`"
+          src="`../assets/banner-1-m.jpg`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else
-          lazy-src="`../assets/banner01g.jpg`"
-          src="`../assets/banner01p.jpg`"
+          lazy-src="`../assets/banner-1-g.jpg`"
+          src="`../assets/banner-1-p.jpg`"
           position="top"
         ></v-carousel-item>
 
