@@ -28,7 +28,7 @@
           position="top"
         ></v-carousel-item> -->
 
-        <v-carousel-item
+        <!-- <v-carousel-item
           v-if="screenSize === 'g'"
           lazy-src="`../assets/banner/banner02g.png`"
           src="`../assets/banner/banner02g.png`"
@@ -45,7 +45,7 @@
           lazy-src="`../assets/banner/banner02p.jpg`"
           src="`../assets/banner/banner02p.jpg`"
           position="top"
-        ></v-carousel-item>
+        ></v-carousel-item> -->
 
         <v-carousel-item
           v-if="screenSize === 'g'"
