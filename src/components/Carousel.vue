@@ -2,11 +2,12 @@
   <v-row no-gutters>
     <v-col cols="12">
       <v-carousel
+        :style="carouselStyle"
+        style="width: 100%; height: 100%"
         hide-delimiter-background
         show-arrows="hover"
         continuous
         cycle
-        style="height: 100%; width: 100%"
       >
         <v-carousel-item
           v-if="screenSize === 'g'"
@@ -134,6 +135,12 @@ export default {
       if (this.windowWidth >= 1920) return 'g';
       else if (this.windowWidth >= 1440) return 'm';
       else return 'p';
+    },
+    carouselStyle() {
+      if (this.windowWidth >= 1920) return { 'min-height': '400px' };
+      else if (this.windowWidth >= 1240) return { 'min-height': '500px' };
+      else if (this.windowWidth >= 920) return { 'min-height': '400px' };
+      else return { 'min-height': '200px' };
     },
   },
   props: {
