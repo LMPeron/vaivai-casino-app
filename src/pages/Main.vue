@@ -1,7 +1,7 @@
 <template>
   <div style="background-color: rgb(28, 31, 34); width: 100%">
     <div v-if="!runningGame">
-      <Carousel />
+      <Carousel v-if="!loading" :bannerList="bannerList" />
       <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
       <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
@@ -24,6 +24,7 @@ import Carousel from '@/components/Carousel.vue';
 import Top from '@/components/Top.vue';
 import Bingo from '@/components/Bingo.vue';
 import GameList from '@/components/GameList.vue';
+import ConfigService from '@/service/ConfigService.js';
 import GameService from '@/service/GameService.js';
 import ENVIROMENT from '@/env';
 import OrtizFrame from '@/components/OrtizFrame.vue';
@@ -41,9 +42,11 @@ export default {
       gameService: new GameService(),
       softswissService: new SoftSwissService(),
       ortizService: new OrtizService(),
+      configService: new ConfigService(),
       gameCategories: [],
       topGameList: [],
       bingoGameList: [],
+      bannerList: [],
       softswissGameUrl: '',
       ortizGameHTML: '',
       selectedCategory: '',
@@ -60,6 +63,7 @@ export default {
   },
   methods: {
     async getData() {
+      await this.getBanners();
       await this.getGameList();
       await this.getTopGameList();
       await this.getBingoGameList();
@@ -87,6 +91,14 @@ export default {
       try {
         const response = await this.gameService.getBingo();
         this.bingoGameList = response.data?.gameList;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getBanners() {
+      try {
+        const response = await this.configService.getBanners();
+        this.bannerList = response.data?.bannerList;
       } catch (error) {
         console.log(error);
       }
