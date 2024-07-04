@@ -10,47 +10,23 @@
         cycle
       >
         <v-carousel-item
-          lazy-src="../assets/banner-1-g.jpg"
-          src="../assets/banner-1-g.jpg"
-          position="top"
-        ></v-carousel-item>
-
-        <v-carousel-item
-          lazy-src="../assets/banner-2-g.png"
-          src="../assets/banner-2-g.png"
-          position="top"
-        ></v-carousel-item>
-
-        <v-carousel-item
-          lazy-src="../assets/banner-3-g.png"
-          src="../assets/banner-3-g.png"
-          position="top"
-        ></v-carousel-item>
-
-        <v-carousel-item
-          lazy-src="../assets/banner-4-g.png"
-          src="../assets/banner-4-g.png"
-          position="top"
-        ></v-carousel-item>
-
-        <!-- <v-carousel-item
           v-if="screenSize === 'g'"
-          lazy-src="`../assets/banner01g.jpg`"
-          src="`../assets/banner01g.jpg`"
+          lazy-src="`https://vaivaibet.com/assets/img/cassino/banner01g.jpg`"
+          src="`https://vaivaibet.com/assets/img/cassino/banner01g.jpg`"
           position="top"
-        ></v-carousel-item> -->
-        <!-- <v-carousel-item
+        ></v-carousel-item>
+        <v-carousel-item
           v-else-if="screenSize === 'm'"
-          lazy-src="`../assets/banner01g.jpg`"
-          src="`../assets/banner01m.jpg`"
+          lazy-src="`https://vaivaibet.com/assets/img/cassino/banner01m.jpg`"
+          src="`https://vaivaibet.com/assets/img/cassino/banner01m.jpg`"
           position="top"
         ></v-carousel-item>
         <v-carousel-item
           v-else
-          lazy-src="`../assets/banner01g.jpg`"
-          src="`../assets/banner01p.jpg`"
+          lazy-src="`https://vaivaibet.com/assets/img/cassino/banner01p.jpg`"
+          src="`https://vaivaibet.com/assets/img/cassino/banner01p.jpg`"
           position="top"
-        ></v-carousel-item> -->
+        ></v-carousel-item>
 
         <!-- <v-carousel-item
           v-if="screenSize === 'g'"
