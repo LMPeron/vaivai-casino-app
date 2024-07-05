@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: rgb(28, 31, 34); width: 100%">
-    <div v-if="!runningGame">
+    <div v-if="!appState.running">
       <Carousel v-if="!loading" :bannerList="bannerList" />
       <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
       <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
