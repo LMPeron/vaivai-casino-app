@@ -1,5 +1,10 @@
 <template>
-  <div :class="['sidebar', { 'is-closed': !isOpen, 'is-closed-mobile': !isOpen && isMobile }]">
+  <div
+    :class="[
+      'sidebar',
+      { 'is-closed': !isOpen, 'is-closed-mobile': (!isOpen && isMobile) || (!isOpen && isAdmin) },
+    ]"
+  >
     <div v-if="isOpen" class="sidebar-content">
       <v-expansion-panels>
         <v-expansion-panel
@@ -36,7 +41,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-    <div v-else-if="!isMobile">
+    <div v-else-if="!isMobile && !isAdmin">
       <v-list lines="one">
         <template v-for="(games, category) in sidebarCategories">
           <v-list-item-group :key="category" v-if="category === 'Cassino'">
@@ -68,17 +73,31 @@
 <script>
 export default {
   name: 'Sidebar',
-  props: ['sidebarCategories', 'isOpen'],
+
   methods: {
     handleClick(category) {
       if (category.length === 1) {
-        this.$router.push(`/game/${category[0].value}`);
+        this.$router.push(`/${this.isAdmin ? 'admin' : 'game'}/${category[0].value}`);
       }
     },
   },
   computed: {
     isMobile() {
       return window.innerWidth <= 768;
+    },
+  },
+  props: {
+    sidebarCategories: {
+      type: Array,
+      default: () => [],
+    },
+    isOpen: {
+      type: Boolean,
+      default: false,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
 };

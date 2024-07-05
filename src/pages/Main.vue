@@ -1,7 +1,7 @@
 <template>
   <div style="background-color: rgb(28, 31, 34); width: 100%">
     <div v-if="!appState.running">
-      <Carousel v-if="!loading" :bannerList="bannerList" />
+      <Carousel :bannerList="bannerList" />
       <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
       <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">

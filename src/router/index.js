@@ -1,8 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
+import AppLayoutAdmin from '@/layouts/AppLayoutAdmin.vue';
 import useUserStore from '@/stores/user.js';
 
 const routes = [
+  {
+    path: '/:auth',
+    component: () => import('@/pages/AuthMiddleware.vue'),
+  },
   {
     path: '/',
     component: AppLayout,
@@ -21,20 +26,21 @@ const routes = [
     ],
   },
   {
-    path: '/:auth',
-    component: () => import('@/pages/AuthMiddleware.vue'),
-  },
-  {
-    path: '/ortiz',
-    component: () => import('@/pages/OrtizTest.vue'),
-  },
-  {
     path: '/admin',
-    component: () => import('@/pages/Admin.vue'),
-  },
-  {
-    path: '/admin/auth',
-    component: () => import('@/pages/AdminLogin.vue'),
+    component: AppLayoutAdmin,
+    meta: {
+      requiresAuth: true,
+    },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'admin',
+        meta: {
+          breadcrumb: ['Admin'],
+        },
+        component: () => import('@/pages/Admin/Dashboard.vue'),
+      },
+    ],
   },
 ];
 

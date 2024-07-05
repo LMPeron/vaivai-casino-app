@@ -78,8 +78,13 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item v-for="(item, index) in items" :key="index" :value="index">
-              <v-list-item-title @click="item.onClick">{{ item.title }}</v-list-item-title>
+            <v-list-item
+              v-for="(item, index) in items"
+              :key="index"
+              :value="index"
+              @click="item.onClick"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -98,12 +103,6 @@ export default {
       windowWidth: window.innerWidth,
       showBalance: false,
       items: [
-        {
-          title: 'Painel',
-          onClick: () => {
-            this.$router.push('/admin');
-          },
-        },
         {
           title: 'Sair',
           onClick: () => window.location.replace('https://pitstopbet.com/?page=cassino'),
@@ -141,6 +140,16 @@ export default {
     showHeader() {
       return this.windowWidth >= 1280;
     },
+  },
+  created() {
+    if (this.userState?._user?.isAdmin) {
+      this.items.unshift({
+        title: 'Painel',
+        onClick: () => {
+          this.$router.push('/admin/dashboard');
+        },
+      });
+    }
   },
 };
 </script>
