@@ -21,7 +21,31 @@
         <v-btn class="button" @click="getPastWeekDashboard()"> semana passada </v-btn>
       </v-col>
       <v-col class="button-col">
-        <v-btn class="button"> período </v-btn>
+        <v-btn class="button" @click="showByRangeInput = !showByRangeInput"> período </v-btn>
+      </v-col>
+      <v-col
+        cols="12"
+        class="pl-4 pt-8"
+        style="
+          background-color: rgba(0, 0, 0, 0.87);
+          border-radius: 10px;
+          text-align: -webkit-center;
+        "
+        v-if="showByRangeInput"
+      >
+        <v-date-input
+          v-model="range"
+          label="Selecionar período"
+          max-width="368"
+          multiple="range"
+        ></v-date-input>
+        <v-btn
+          style="color: #000; background-color: white"
+          class="button"
+          @click="getRangeDashboard()"
+        >
+          Filtrar
+        </v-btn>
       </v-col>
     </v-row>
 
@@ -81,6 +105,7 @@
 <script>
 import userStore from '@/stores/user';
 import AdminService from '@/service/AdminService';
+import { VDateInput } from 'vuetify/labs/VDateInput';
 
 export default {
   name: 'Admin',
@@ -90,7 +115,12 @@ export default {
       adminService: new AdminService(),
       report: {},
       loading: false,
+      range: null,
+      showByRangeInput: false,
     };
+  },
+  components: {
+    VDateInput,
   },
 
   methods: {
@@ -116,16 +146,12 @@ export default {
     async getYesterdayDashboard() {
       this.loading = true;
       const today = new Date();
-
       const yesterday = new Date(today);
       yesterday.setDate(today.getDate() - 1);
-
       const startDate = new Date(yesterday.setHours(0, 0, 0, 0));
       const endDate = new Date(yesterday.setHours(23, 59, 59, 999));
-
       this.getDashboard(startDate, endDate).finally(() => (this.loading = false));
     },
-
     async getLastWeekDashboard() {
       this.loading = true;
       const today = new Date();
@@ -148,8 +174,12 @@ export default {
       endDate.setHours(23, 59, 59, 999);
       this.getDashboard(startDate, endDate).finally(() => (this.loading = false));
     },
+    async getRangeDashboard() {
+      this.loading = true;
+      console.log(this.range);
+      this.getDashboard(this.range[1], this.range[-1]).finally(() => (this.loading = false));
+    },
   },
-
   created() {
     this.getTodayDashboard();
   },
