@@ -4,7 +4,7 @@
       <v-col cols="12">
         <span style="color: rgba(0, 0, 0, 0.87); font-weight: 500">Visão Geral</span>
         <span style="color: rgba(0, 0, 0, 0.87); font-weight: 400; display: block; font-size: small"
-          >05-07-2024 - 05-07-2024</span
+          >{{ formatDate(startDate) }} - {{ formatDate(endDate) }}</span
         >
       </v-col>
 
@@ -50,8 +50,8 @@
     </v-row>
 
     <span class="label">Cassino</span>
-    <v-row class="pt-2">
-      <v-col cols="4" md="4">
+    <v-row class="pt-2 pb-4">
+      <v-col cols="4">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
@@ -61,13 +61,13 @@
 
           <v-card-text>
             <span>
-              {{ formatCurrencyBRL(report.bet?.amount) }}
+              {{ formatCurrencyBRL(report.action?.bet?.amount) }}
             </span>
-            <span style="float: inline-end"> {{ report.bet?.quantity }} </span>
+            <span style="float: inline-end"> {{ report.action?.bet?.quantity }} </span>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="4" md="4">
+      <v-col cols="4">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
@@ -77,23 +77,85 @@
 
           <v-card-text>
             <span>
-              {{ formatCurrencyBRL(report.prize?.amount) }}
+              {{ formatCurrencyBRL(report.action?.prize?.amount) }}
             </span>
-            <span style="float: inline-end"> {{ report.prize?.quantity }} </span>
+            <span style="float: inline-end"> {{ report.action?.prize?.quantity }} </span>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="4" md="4">
+
+      <v-col cols="4">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
               <span> Líquido </span>
             </v-card-title>
           </v-card-item>
-
           <v-card-text>
             <span>
-              {{ formatCurrencyBRL(report.profit) }}
+              {{ formatCurrencyBRL(report.action?.profit) }}
+            </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <span class="label">Carteira</span>
+    <v-row class="pt-2">
+      <v-col cols="3">
+        <v-card class="card">
+          <v-card-item>
+            <v-card-title>
+              <span> Entrada do JB </span>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <span>
+              {{ formatCurrencyBRL(report.flow?.deposit?.amount) }}
+            </span>
+            <span style="float: inline-end"> {{ report.flow?.deposit?.quantity }} </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3">
+        <v-card class="card">
+          <v-card-item>
+            <v-card-title>
+              <span> Saída para JB </span>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <span>
+              {{ formatCurrencyBRL(report.flow?.withdraw?.amount) }}
+            </span>
+            <span style="float: inline-end"> {{ report.flow?.withdraw?.quantity }} </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3">
+        <v-card class="card">
+          <v-card-item>
+            <v-card-title>
+              <span> Entrada - Saída </span>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <span>
+              {{ formatCurrencyBRL(report.flow?.profit) }}
+            </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="3">
+        <v-card class="card">
+          <v-card-item>
+            <v-card-title>
+              <span> Carteira de clientes </span>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <span>
+              {{ formatCurrencyBRL(report.flow?.totalBalance) }}
             </span>
           </v-card-text>
         </v-card>
@@ -117,6 +179,8 @@ export default {
       loading: false,
       range: null,
       showByRangeInput: false,
+      startDate: new Date(),
+      endDate: new Date(),
     };
   },
   components: {
@@ -137,10 +201,18 @@ export default {
       if (!value) return 'R$ 0,00';
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
     },
+    formatDate(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    },
     async getTodayDashboard() {
       this.loading = true;
       const today = new Date();
       const startDate = new Date(today.setHours(0, 0, 0, 0));
+      this.startDate = startDate;
+      this.endDate = new Date();
       this.getDashboard(startDate, new Date()).finally(() => (this.loading = false));
     },
     async getYesterdayDashboard() {
@@ -150,6 +222,8 @@ export default {
       yesterday.setDate(today.getDate() - 1);
       const startDate = new Date(yesterday.setHours(0, 0, 0, 0));
       const endDate = new Date(yesterday.setHours(23, 59, 59, 999));
+      this.startDate = startDate;
+      this.endDate = endDate;
       this.getDashboard(startDate, endDate).finally(() => (this.loading = false));
     },
     async getLastWeekDashboard() {
@@ -161,6 +235,8 @@ export default {
       const endDate = new Date(today);
       endDate.setDate(today.getDate() - 1);
       endDate.setHours(23, 59, 59, 999);
+      this.startDate = startDate;
+      this.endDate = endDate;
       this.getDashboard(startDate, endDate).finally(() => (this.loading = false));
     },
     async getPastWeekDashboard() {
@@ -172,6 +248,8 @@ export default {
       const endDate = new Date(today);
       endDate.setDate(today.getDate() - 7);
       endDate.setHours(23, 59, 59, 999);
+      this.startDate = startDate;
+      this.endDate = endDate;
       this.getDashboard(startDate, endDate).finally(() => (this.loading = false));
     },
     async getRangeDashboard() {

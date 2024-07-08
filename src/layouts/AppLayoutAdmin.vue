@@ -36,6 +36,13 @@ export default {
             value: 'dashboard',
           },
         ],
+        Dashboard: [
+          {
+            title: 'Dashboard',
+            icon: 'mdi-view-dashboard',
+            value: 'dashboard',
+          },
+        ],
       },
     };
   },
