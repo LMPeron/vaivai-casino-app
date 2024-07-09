@@ -31,6 +31,7 @@ import OrtizFrame from '@/components/OrtizFrame.vue';
 import SoftswissFrame from '@/components/SoftswissFrame.vue';
 import appStore from '@/stores/app';
 import userStore from '@/stores/user';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'main-page',
@@ -38,6 +39,7 @@ export default {
     return {
       appState: appStore(),
       userState: userStore(),
+      toast: useToast(),
       loading: false,
       gameService: new GameService(),
       softswissService: new SoftSwissService(),
@@ -104,6 +106,10 @@ export default {
       }
     },
     async openGame(game) {
+      if (this.userState._user.Wallet.balance === 0) {
+        this.toast.error('Saldo insuficiente para jogar. Por favor, faça um depósito.');
+        return;
+      }
       this.appState.setRunning(true);
       if (game.Provider?.Platform?.reference === 'softswiss') await this.openSoftswissGame(game.id);
       else if (game.Provider?.Platform?.reference === 'ortiz') await this.openOrtizGame(game.id);

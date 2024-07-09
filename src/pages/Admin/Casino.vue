@@ -67,11 +67,13 @@
 import GameService from '@/service/GameService';
 import AdminService from '@/service/AdminService';
 import { VueDraggableNext } from 'vue-draggable-next';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'Casino',
   data() {
     return {
+      toast: useToast(),
       gameService: new GameService(),
       adminService: new AdminService(),
       gameList: [],
@@ -101,12 +103,15 @@ export default {
         }));
       } catch (error) {
         console.error(error);
+        this.toast.error('Erro ao buscar os jogos');
       }
     },
     async savePriorityGames() {
       try {
         await this.adminService.savePriorityGames(this.priorityByCategory);
+        this.toast.success('Ordenação salva com sucesso');
       } catch (error) {
+        this.toast.error('Erro ao salvar a ordenação');
         console.error(error);
       }
     },
