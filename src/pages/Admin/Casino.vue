@@ -13,11 +13,10 @@
           v-bind="dragOptions"
           class="dragArea flex flex-wrap w-full list-group"
           :list="priorityGameList"
-          @change="log"
         >
           <div
             class="list-group-item bg-gray-300 rounded-md text-center"
-            v-for="game in priorityByCategory[selectedCategory] || priorityGameList"
+            v-for="game in priorityByCategory"
             :key="game.id"
           >
             <img
@@ -41,7 +40,7 @@
         <draggable
           v-bind="dragOptions"
           class="dragArea flex flex-wrap w-full list-group"
-          :list="gameList"
+          :list="categoryList[selectedCategory] || gameList"
           @change="log"
         >
           <div
@@ -106,7 +105,7 @@ export default {
     },
     async savePriorityGames() {
       try {
-        await this.adminService.savePriorityGames(this.priorityGameList);
+        await this.adminService.savePriorityGames(this.priorityByCategory);
       } catch (error) {
         console.error(error);
       }
