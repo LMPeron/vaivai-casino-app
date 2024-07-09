@@ -51,7 +51,7 @@
 
     <span class="label">Cassino</span>
     <v-row class="pt-2 pb-4">
-      <v-col cols="4">
+      <v-col cols="12" md="4">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
@@ -67,7 +67,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="12" md="4">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
@@ -84,7 +84,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="4">
+      <v-col cols="12" md="4">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
@@ -102,7 +102,7 @@
 
     <span class="label">Carteira</span>
     <v-row class="pt-2">
-      <v-col cols="3">
+      <v-col cols="12" md="3">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
@@ -117,7 +117,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="12" md="3">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
@@ -132,7 +132,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="12" md="3">
         <v-card class="card">
           <v-card-item>
             <v-card-title>
@@ -146,7 +146,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="12" md="3">
         <v-card class="card">
           <v-card-item>
             <v-card-title>

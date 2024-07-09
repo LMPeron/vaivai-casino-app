@@ -19,6 +19,7 @@
     "md5": "^2.3.0",
     "roboto-fontface": "*",
     "vue": "^3.4.0",
+    "vue-draggable-next": "^2.2.1",
     "vuetify": "^3.5.0"
   },
   "devDependencies": {

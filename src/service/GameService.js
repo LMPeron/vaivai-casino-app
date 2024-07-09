@@ -3,7 +3,16 @@ import http from '@/http-common';
 export default class GameService {
   async getAll() {
     return http
-      .get(`/api/game`)
+      .get(`/api/game/all`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
+  async getAllPriorities() {
+    return http
+      .get(`/api/game/priorities`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;

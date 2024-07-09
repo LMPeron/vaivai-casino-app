@@ -36,11 +36,11 @@ export default {
             value: 'dashboard',
           },
         ],
-        Dashboard: [
+        Cassino: [
           {
-            title: 'Dashboard',
-            icon: 'mdi-view-dashboard',
-            value: 'dashboard',
+            title: 'Cassino',
+            icon: 'mdi-slot-machine',
+            value: 'casino',
           },
         ],
       },

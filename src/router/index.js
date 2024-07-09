@@ -40,6 +40,10 @@ const routes = [
         },
         component: () => import('@/pages/Admin/Dashboard.vue'),
       },
+      {
+        path: 'casino',
+        component: () => import('@/pages/Admin/Casino.vue'),
+      },
     ],
   },
 ];
