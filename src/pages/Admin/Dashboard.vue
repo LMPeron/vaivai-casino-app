@@ -100,6 +100,66 @@
       </v-col>
     </v-row>
 
+    <span class="label">Esportes</span>
+    <v-row class="pt-2">
+      <v-col cols="12" md="3">
+        <v-card class="card">
+          <v-card-item>
+            <v-card-title>
+              <span> Apostado </span>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <span>
+              {{ formatCurrencyBRL(report.sport?.apostado) }}
+            </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="3">
+        <v-card class="card">
+          <v-card-item>
+            <v-card-title>
+              <span> Prêmio </span>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <span>
+              {{ formatCurrencyBRL(report.sport?.premio) }}
+            </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="3">
+        <v-card class="card">
+          <v-card-item>
+            <v-card-title>
+              <span> Pendente </span>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <span>
+              {{ formatCurrencyBRL(report.sport?.pendente) }}
+            </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="3">
+        <v-card class="card">
+          <v-card-item>
+            <v-card-title>
+              <span> Líquido </span>
+            </v-card-title>
+          </v-card-item>
+          <v-card-text>
+            <span>
+              {{ formatCurrencyBRL(report.sport?.pendente) }}
+            </span>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
     <span class="label">Carteira</span>
     <v-row class="pt-2">
       <v-col cols="12" md="3">
