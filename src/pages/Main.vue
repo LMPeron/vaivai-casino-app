@@ -3,7 +3,7 @@
     <div v-if="!appState.running">
       <Carousel :bannerList="bannerList" />
       <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
-      <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
+      <!-- <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" /> -->
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
         <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
       </div>
@@ -25,6 +25,7 @@ import Top from '@/components/Top.vue';
 import Bingo from '@/components/Bingo.vue';
 import GameList from '@/components/GameList.vue';
 import ConfigService from '@/service/ConfigService.js';
+import BannerService from '@/service/BannerService.js';
 import GameService from '@/service/GameService.js';
 import ENVIROMENT from '@/env';
 import OrtizFrame from '@/components/OrtizFrame.vue';
@@ -32,6 +33,7 @@ import SoftswissFrame from '@/components/SoftswissFrame.vue';
 import appStore from '@/stores/app';
 import userStore from '@/stores/user';
 import { useToast } from 'vue-toastification';
+import { useScroll } from '@vueuse/core';
 
 export default {
   name: 'main-page',
@@ -39,12 +41,16 @@ export default {
     return {
       appState: appStore(),
       userState: userStore(),
+      scrolling: useScroll(window),
       toast: useToast(),
+      row: 0,
       loading: false,
+      firstLoad: true,
       gameService: new GameService(),
       softswissService: new SoftSwissService(),
       ortizService: new OrtizService(),
       configService: new ConfigService(),
+      bannerService: new BannerService(),
       gameCategories: [],
       topGameList: [],
       bingoGameList: [],
@@ -72,11 +78,18 @@ export default {
     },
     async getGameList() {
       try {
+        this.firstLoad = false;
         let response;
-        if (this.selectedCategory && this.selectedCategory !== 'all')
-          response = await this.gameService.getAllSortedByCategory(this.selectedCategory);
-        else response = await this.gameService.getAllSorted();
-        this.gameCategories = response.data?.categories;
+        if (this.selectedCategory && this.selectedCategory !== 'all') {
+          response = await this.gameService.getAllSortedByCategory(this.selectedCategory, this.row);
+        } else response = await this.gameService.getAllSorted();
+        if (this.row > 0)
+          this.gameCategories[this.selectedCategory] = [
+            ...this.gameCategories[this.selectedCategory],
+            ...response.data?.categories[this.selectedCategory],
+          ];
+        else this.gameCategories = response.data?.categories;
+        this.row = response.data?.row;
       } catch (error) {
         console.log(error);
       }
@@ -99,7 +112,7 @@ export default {
     },
     async getBanners() {
       try {
-        const response = await this.configService.getBanners();
+        const response = await this.bannerService.getAll();
         this.bannerList = response.data?.bannerList;
       } catch (error) {
         console.log(error);
@@ -159,19 +172,36 @@ export default {
     showAll() {
       return this.selectedCategory === '' || this.selectedCategory === 'all';
     },
+    scrolledBottom() {
+      return this.scrolling.arrivedState.bottom;
+    },
   },
   watch: {
     $route(to, from) {
       this.loading = true;
+      this.firstLoad = true;
+      this.row = 0;
       this.getRouteParams();
       this.getGameList().finally(() => (this.loading = false));
+    },
+    scrolledBottom: {
+      handler() {
+        const y = this.scrolling.y;
+        if (this.scrolling.arrivedState.bottom && !this.firstLoad) {
+          this.getGameList().then(() => {
+            this.scrolling.y = y;
+          });
+        }
+      },
     },
   },
   created() {
     this.loading = true;
     this.getRouteParams();
     this.appState.setRunning(false);
-    this.getData().finally(() => (this.loading = false));
+    this.getData().finally(() => {
+      this.loading = false;
+    });
   },
 };
 </script>

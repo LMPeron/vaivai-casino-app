@@ -12,7 +12,9 @@
         style="width: 100%; height: 100%; border-radius: 5px"
         :src="
           game.Provider?.Platform?.reference === 'softswiss'
-            ? `https://cdn.softswiss.net/i/s2/${game.Provider?.reference}/${game.identifier2}.png`
+            ? `https://cdn.softswiss.net/i/s2/${game.Provider?.reference}/${
+                game.identifier.split(':')[1] ? game.identifier.split(':')[1] : game.identifier
+              }.png`
             : game.imgUrl
         "
         alt=""
@@ -32,6 +34,7 @@
 
 <script>
 import GameService from '@/service/GameService.js';
+
 export default {
   data() {
     return {

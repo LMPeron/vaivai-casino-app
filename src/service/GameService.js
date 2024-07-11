@@ -28,9 +28,9 @@ export default class GameService {
       });
   }
 
-  async getAllSortedByCategory(category) {
+  async getAllSortedByCategory(category, row) {
     return http
-      .get(`/api/game/sorted/${category}`)
+      .get(`/api/game/sorted/${category}/${row}`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
