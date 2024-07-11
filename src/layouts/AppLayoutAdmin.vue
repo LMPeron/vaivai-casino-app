@@ -43,6 +43,20 @@ export default {
             value: 'casino',
           },
         ],
+        Banner: [
+          {
+            title: 'Banner',
+            icon: 'mdi-slot-machine',
+            value: 'banner',
+          },
+        ],
+        Relatorio: [
+          {
+            title: 'Relatório',
+            icon: 'mdi-slot-machine',
+            value: 'report',
+          },
+        ],
       },
     };
   },

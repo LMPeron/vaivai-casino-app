@@ -44,6 +44,14 @@ const routes = [
         path: 'casino',
         component: () => import('@/pages/Admin/Casino.vue'),
       },
+      {
+        path: 'banner',
+        component: () => import('@/pages/Admin/Banner.vue'),
+      },
+      {
+        path: 'report',
+        component: () => import('@/pages/Admin/Report.vue'),
+      },
     ],
   },
 ];

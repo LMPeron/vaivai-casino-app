@@ -7,7 +7,6 @@
           >{{ formatDate(startDate) }} - {{ formatDate(endDate) }}</span
         >
       </v-col>
-
       <v-col class="button-col">
         <v-btn class="button" @click="getTodayDashboard()"> Hoje </v-btn>
       </v-col>
@@ -101,7 +100,7 @@
     </v-row>
 
     <span class="label">Esportes</span>
-    <v-row class="pt-2">
+    <v-row class="pt-2 pb-4">
       <v-col cols="12" md="3">
         <v-card class="card">
           <v-card-item>
@@ -246,7 +245,6 @@ export default {
   components: {
     VDateInput,
   },
-
   methods: {
     async getDashboard(startDate, endDate) {
       try {
@@ -314,7 +312,6 @@ export default {
     },
     async getRangeDashboard() {
       this.loading = true;
-      console.log(this.range);
       this.getDashboard(this.range[1], this.range[-1]).finally(() => (this.loading = false));
     },
   },
