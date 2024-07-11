@@ -1,11 +1,18 @@
 <template>
   <div style="background-color: rgb(241, 241, 241); width: 100%; height: 100%" class="px-10 pt-4">
     <div class="flex mb-4">
-      <span class="label">Banners</span>
+      <v-row class="mb-4">
+        <v-col>
+          <span class="label">Banners</span>
+        </v-col>
+        <v-col class="button-col">
+          <v-btn class="button" @click="getYesterdayDashboard()"> Adicionar </v-btn>
+        </v-col>
+      </v-row>
       <v-card class="card">
         <draggable
           v-bind="dragOptions"
-          class="dragArea flex flex-wrap w-full list-group"
+          class="dragArea flex flex-wrap w-full list-group pt-2 pr-4"
           :list="bannerList"
         >
           <div
@@ -13,7 +20,7 @@
             v-for="banner in bannerList"
             :key="banner.id"
           >
-            <img :src="banner.url" alt="" />
+            <img style="width: 100%" :src="banner.url" alt="" />
           </div>
         </draggable>
       </v-card>

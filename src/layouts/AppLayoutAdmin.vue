@@ -46,14 +46,14 @@ export default {
         Banner: [
           {
             title: 'Banner',
-            icon: 'mdi-slot-machine',
+            icon: 'mdi-image-area',
             value: 'banner',
           },
         ],
         Relatorio: [
           {
             title: 'Relatório',
-            icon: 'mdi-slot-machine',
+            icon: 'mdi-database',
             value: 'report',
           },
         ],

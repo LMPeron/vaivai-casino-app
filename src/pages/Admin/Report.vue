@@ -47,6 +47,7 @@
 
       <v-col class="pl-0 pr-0">
         <v-data-table-virtual
+          no-data-text="Nenhum dado encontrado"
           :headers="headers"
           :items="report"
           item-value="name"
