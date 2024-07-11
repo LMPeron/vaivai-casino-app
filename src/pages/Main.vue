@@ -138,6 +138,7 @@ export default {
         this.softswissGameUrl = response.data.game_url;
       } catch (error) {
         this.appState.setRunning(false);
+        this.toast.error('Não foi possível abrir o jogo. Tente novamente mais tarde');
         console.log(error);
       } finally {
         this.loading = false;
@@ -150,6 +151,7 @@ export default {
         this.ortizGameHTML = response.data;
       } catch (error) {
         this.appState.setRunning(false);
+        this.toast.error('Não foi possível abrir o jogo. Tente novamente mais tarde');
         console.log(error);
       } finally {
         this.loading = false;
