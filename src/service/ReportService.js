@@ -3,7 +3,7 @@ import http from '@/http-common';
 export default class ReportService {
   async getByGames(startDate, endDate) {
     return http
-      .get(`/api/report/game`, {
+      .get(`/report/game`, {
         params: {
           startDate,
           endDate,
@@ -17,7 +17,7 @@ export default class ReportService {
 
   async getByProviders(startDate, endDate) {
     return http
-      .get(`/api/report/provider`, {
+      .get(`/report/provider`, {
         params: {
           startDate,
           endDate,
@@ -31,7 +31,7 @@ export default class ReportService {
 
   async getByPlayers(startDate, endDate) {
     return http
-      .get(`/api/report/player`, {
+      .get(`/report/player`, {
         params: {
           startDate,
           endDate,

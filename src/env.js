@@ -1,5 +1,5 @@
 export default {
-  APP_URL: 'http://localhost:8080',
+  APP_URL: 'https://vaivaibet.app',
   MAIN_APP_URL: 'https://pitstopbet.com/?page=cassino',
-  VITE_APP_HOST_HTTP: 'http://localhost:3000',
+  VITE_APP_HOST_HTTP: 'https://api.vaivaibet.app/api',
 };

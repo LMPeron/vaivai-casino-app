@@ -28,7 +28,7 @@ export default class AuthService {
 
   static async renewToken() {
     try {
-      const r = await http.post('/api/auth/renew-token');
+      const r = await http.post('/auth/renew-token');
       return r.data;
     } catch (e) {
       throw e.response.data || e;

@@ -3,7 +3,7 @@ import http from '@/http-common';
 export default class GameService {
   async getAll() {
     return http
-      .get(`/api/game/all`)
+      .get(`/game/all`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -12,7 +12,7 @@ export default class GameService {
 
   async getAllPriorities() {
     return http
-      .get(`/api/game/priorities`)
+      .get(`/game/priorities`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -21,7 +21,7 @@ export default class GameService {
 
   async getAllSorted() {
     return http
-      .get(`/api/game/sorted`)
+      .get(`/game/sorted`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -30,7 +30,7 @@ export default class GameService {
 
   async getAllSortedByCategory(category, row) {
     return http
-      .get(`/api/game/sorted/${category}/${row}`)
+      .get(`/game/sorted/${category}/${row}`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -39,7 +39,7 @@ export default class GameService {
 
   async getTop() {
     return http
-      .get(`/api/game/top`)
+      .get(`/game/top`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -48,7 +48,7 @@ export default class GameService {
 
   async getBingo() {
     return http
-      .get(`/api/game/bingo`)
+      .get(`/game/bingo`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -57,7 +57,7 @@ export default class GameService {
 
   async favorite(gameId) {
     return http
-      .post(`/api/game/favorite`, {
+      .post(`/game/favorite`, {
         gameId: gameId,
       })
       .then((r) => r.data)
@@ -68,7 +68,7 @@ export default class GameService {
 
   async unfavorite(gameId) {
     return http
-      .post(`/api/game/unfavorite`, {
+      .post(`/game/unfavorite`, {
         gameId: gameId,
       })
       .then((r) => r.data)

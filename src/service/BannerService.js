@@ -3,7 +3,7 @@ import http from '@/http-common';
 export default class BannerService {
   async getAll() {
     return http
-      .get(`/api/banner/all`)
+      .get(`/banner/all`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -12,7 +12,7 @@ export default class BannerService {
 
   async getAllGSize() {
     return http
-      .get(`/api/banner/g`)
+      .get(`/banner/g`)
       .then((r) => r.data)
       .catch((e) => {
         throw e.response.data || e;
@@ -21,7 +21,7 @@ export default class BannerService {
 
   async priority(bannerList) {
     return http
-      .put(`/api/banner/order`, {
+      .put(`/banner/order`, {
         bannerList: bannerList,
       })
       .then((r) => r.data)
@@ -36,7 +36,7 @@ export default class BannerService {
     formData.append('size', size);
 
     return http
-      .post(`/api/banner`, formData, {
+      .post(`/banner`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

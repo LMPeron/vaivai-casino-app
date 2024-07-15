@@ -3,7 +3,7 @@ import http from '@/http-common';
 export default class AdminService {
   async getDashboard(startDate, endDate) {
     return http
-      .get(`/api/admin/dashboard`, {
+      .get(`/admin/dashboard`, {
         params: {
           startDate,
           endDate,
@@ -17,7 +17,7 @@ export default class AdminService {
 
   async savePriorityGames(priorityGameList) {
     return http
-      .post(`/api/admin/game/priority`, {
+      .post(`/admin/game/priority`, {
         priorityGameList: priorityGameList,
       })
       .then((r) => r.data)
