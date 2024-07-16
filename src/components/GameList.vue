@@ -18,6 +18,14 @@
       >
         <Game :game="game" @open="$emit('open', $event)" />
       </v-col>
+      <v-col v-if="!filtered" cols="12">
+        <div>
+          <v-btn @click="$router.push(`${category}`)" variant="tonal"
+            ><v-icon style="font-size: smaller">mdi-plus</v-icon>
+            <span class="pl-2" style="font-size: smaller">mais jogos</span>
+          </v-btn>
+        </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -35,8 +43,12 @@ export default {
       default: () => [],
     },
     category: {
-      typee: String,
+      type: String,
       default: () => '',
+    },
+    filtered: {
+      type: Boolean,
+      default: () => false,
     },
   },
   components: {

@@ -5,12 +5,23 @@
       <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
       <!-- <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" /> -->
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
-        <GameList :gameList="gameList" :category="category" @open="openGame($event)" />
+        <GameList
+          :gameList="gameList"
+          :category="category"
+          :filtered="filtered"
+          @open="openGame($event)"
+        />
       </div>
     </div>
     <div v-else>
       <SoftswissFrame v-if="softswissGameUrl" :gameUrl="softswissGameUrl" @exit="exitGame()" />
       <OrtizFrame v-else-if="ortizGameHTML" :html="ortizGameHTML" @exit="exitGame()" />
+    </div>
+    <div class="mb-4" style="text-align: center">
+      <v-btn v-if="!fullList" variant="tonal" @click="getGameList()"
+        ><v-icon style="font-size: smaller">mdi-plus</v-icon>
+        <span class="pl-2" style="font-size: smaller">mais jogos</span>
+      </v-btn>
     </div>
   </div>
   <AuthApi />
@@ -46,6 +57,8 @@ export default {
       row: 0,
       loading: false,
       firstLoad: true,
+      filtered: false,
+      fullList: false,
       gameService: new GameService(),
       softswissService: new SoftSwissService(),
       ortizService: new OrtizService(),
@@ -78,11 +91,17 @@ export default {
     },
     async getGameList() {
       try {
+        this.loading = true;
         this.firstLoad = false;
         let response;
         if (this.selectedCategory && this.selectedCategory !== 'all') {
           response = await this.gameService.getAllSortedByCategory(this.selectedCategory, this.row);
-        } else response = await this.gameService.getAllSorted();
+          if (Object.keys(response.data?.categories).length === 0) this.fullList = true;
+          this.filtered = true;
+        } else {
+          response = await this.gameService.getAllSorted();
+          this.filtered = false;
+        }
         if (this.row > 0)
           this.gameCategories[this.selectedCategory] = [
             ...this.gameCategories[this.selectedCategory],
@@ -92,6 +111,8 @@ export default {
         this.row = response.data?.row;
       } catch (error) {
         console.log(error);
+      } finally {
+        this.loading = false;
       }
     },
     async getTopGameList() {
@@ -184,12 +205,12 @@ export default {
       this.firstLoad = true;
       this.row = 0;
       this.getRouteParams();
-      this.getGameList().finally(() => (this.loading = false));
+      this.getGameList();
     },
     scrolledBottom: {
       handler() {
         const y = this.scrolling.y;
-        if (this.scrolling.arrivedState.bottom && !this.firstLoad) {
+        if (this.scrolling.arrivedState.bottom && !this.firstLoad && !this.fullList) {
           this.getGameList().then(() => {
             this.scrolling.y = y;
           });
