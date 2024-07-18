@@ -3,7 +3,7 @@
     <div v-if="!appState.running">
       <Carousel :bannerList="bannerList" />
       <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
-      <!-- <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" /> -->
+      <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
         <GameList
           :gameList="gameList"

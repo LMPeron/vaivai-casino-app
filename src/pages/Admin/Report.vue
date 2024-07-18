@@ -46,12 +46,24 @@
       </v-col>
 
       <v-col class="pl-0 pr-0">
-        <v-data-table-virtual
-          no-data-text="Nenhum dado encontrado"
-          :headers="headers"
-          :items="report"
-          item-value="name"
-        ></v-data-table-virtual>
+        <v-card>
+          <template v-slot:text>
+            <v-text-field
+              v-model="search"
+              label="Search"
+              prepend-inner-icon="mdi-magnify"
+              variant="outlined"
+              hide-details
+              single-line
+            ></v-text-field>
+          </template>
+          <v-data-table-virtual
+            no-data-text="Nenhum dado encontrado"
+            :headers="headers"
+            :items="report"
+            item-value="name"
+          ></v-data-table-virtual>
+        </v-card>
       </v-col>
     </v-row>
   </div>
@@ -68,6 +80,7 @@ export default {
       reportService: new ReportService(),
       report: [],
       headers: [],
+      search: '',
       loading: false,
       range: null,
       showByRangeInput: false,
