@@ -59,10 +59,16 @@
           </template>
           <v-data-table-virtual
             no-data-text="Nenhum dado encontrado"
+            :loading="loading"
             :headers="headers"
             :items="report"
+            :search="search"
             item-value="name"
-          ></v-data-table-virtual>
+          >
+            <template v-slot:loading>
+              <v-skeleton-loader type="table-row@8"></v-skeleton-loader>
+            </template>
+          </v-data-table-virtual>
         </v-card>
       </v-col>
     </v-row>
@@ -93,33 +99,48 @@ export default {
   methods: {
     async getByGames(startDate, endDate) {
       try {
+        this.loading = true;
         if (startDate && endDate) this.range = [startDate, endDate];
-        const response = await this.reportService.getByGames(this.range[1], this.range[-1]);
+        startDate = this.range[0];
+        endDate = this.range[this.range.length - 1];
+        if (startDate === endDate) endDate = new Date();
+        const response = await this.reportService.getByGames(startDate, endDate);
         this.report = response.data?.report;
         this.headers = response.data?.headers;
         this.selectedFilter = 'game';
       } catch (error) {
         console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     async getByProviders() {
       try {
-        const response = await this.reportService.getByProviders(this.range[1], this.range[-1]);
+        this.loading;
+        const response = await this.reportService.getByProviders(
+          this.range[0],
+          this.range[this.range.length - 1]
+        );
         this.report = response.data?.report;
         this.headers = response.data?.headers;
         this.selectedFilter = 'provider';
       } catch (error) {
         console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     async getByPlayers() {
       try {
-        const response = await this.reportService.getByPlayers(this.range[1], this.range[-1]);
+        this.loading = true;
+        const response = await this.reportService.getByPlayers(this.range[0], this.range[-1]);
         this.report = response.data?.report;
         this.headers = response.data?.headers;
         this.selectedFilter = 'player';
       } catch (error) {
         console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     activateFilter() {

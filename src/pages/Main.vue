@@ -17,7 +17,7 @@
       <SoftswissFrame v-if="softswissGameUrl" :gameUrl="softswissGameUrl" @exit="exitGame()" />
       <OrtizFrame v-else-if="ortizGameHTML" :html="ortizGameHTML" @exit="exitGame()" />
     </div>
-    <div class="mb-4" style="text-align: center">
+    <div v-if="!appState.running" class="mb-4" style="text-align: center">
       <v-btn v-if="!fullList" variant="tonal" @click="getGameList()"
         ><v-icon style="font-size: smaller">mdi-plus</v-icon>
         <span class="pl-2" style="font-size: smaller">mais jogos</span>
