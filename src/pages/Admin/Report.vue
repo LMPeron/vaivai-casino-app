@@ -61,6 +61,23 @@
             <template v-slot:loading>
               <v-skeleton-loader type="table-row@8"></v-skeleton-loader>
             </template>
+            <template v-if="selectedFilter === 'player'" v-slot:item="{ item }">
+              <tr>
+                <td>{{ item.name }}</td>
+                <td class="table-value">{{ item.betAmount }}</td>
+                <td class="table-value">{{ item.prizeAmount }}</td>
+                <td class="table-value">{{ item.betQuantity }}</td>
+                <td class="table-value">{{ item.balance }}</td>
+
+                <td class="table-value">
+                  <v-btn
+                    @click="$router.push(`/admin/report/player/${item.name}`)"
+                    style="background-color: white; color: black"
+                    >Detalhes</v-btn
+                  >
+                </td>
+              </tr>
+            </template>
           </v-data-table-virtual>
         </v-card>
       </v-col>
@@ -189,5 +206,9 @@ export default {
 
 .button {
   width: 200px;
+}
+
+.table-value {
+  text-align: end;
 }
 </style>

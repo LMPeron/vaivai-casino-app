@@ -52,6 +52,10 @@ const routes = [
         path: 'report',
         component: () => import('@/pages/Admin/Report.vue'),
       },
+      {
+        path: 'report/player/:username',
+        component: () => import('@/pages/Admin/Player.vue'),
+      },
     ],
   },
 ];

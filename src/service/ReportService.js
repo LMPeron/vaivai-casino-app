@@ -42,4 +42,18 @@ export default class ReportService {
         throw e.response.data || e;
       });
   }
+
+  async getPlayerHistory(startDate, endDate, username) {
+    return http
+      .get(`/report/player/${username}`, {
+        params: {
+          startDate,
+          endDate,
+        },
+      })
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
 }
