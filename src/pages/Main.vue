@@ -2,6 +2,30 @@
   <div style="background-color: rgb(28, 31, 34); width: 100%">
     <div v-if="!appState.running">
       <Carousel :bannerList="bannerList" />
+
+      <v-row class="mb-4 pl-4 pr-4">
+        <v-col>
+          <v-text-field
+            v-model="search"
+            label="Pesquisar"
+            prepend-inner-icon="mdi-magnify"
+            variant="outlined"
+            hide-details
+            single-line
+          ></v-text-field>
+        </v-col>
+        <v-col style="align-content: center">
+          <v-btn
+            style="float: inline-start; background-color: rgb(1, 123, 39); color: white"
+            class="button"
+            :loading="loading"
+            @click="getBySearch()"
+          >
+            Buscar
+          </v-btn>
+        </v-col>
+      </v-row>
+
       <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
       <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
@@ -24,6 +48,7 @@
       </v-btn>
     </div>
   </div>
+
   <AuthApi />
 </template>
 
@@ -71,6 +96,8 @@ export default {
       softswissGameUrl: '',
       ortizGameHTML: '',
       selectedCategory: '',
+      search: '',
+      searching: false,
     };
   },
   components: {
@@ -109,6 +136,20 @@ export default {
           ];
         else this.gameCategories = response.data?.categories;
         this.row = response.data?.row;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async getBySearch() {
+      try {
+        this.loading = true;
+        const response = await this.gameService.search(this.search);
+        this.gameCategories = response.data?.categories;
+        this.searching = true;
+        this.fullList = true;
       } catch (error) {
         console.log(error);
       } finally {
@@ -193,7 +234,7 @@ export default {
       return this.softswissGameUrl || this.ortizGameHTML;
     },
     showAll() {
-      return this.selectedCategory === '' || this.selectedCategory === 'all';
+      return (this.selectedCategory === '' || this.selectedCategory === 'all') && !this.searching;
     },
     scrolledBottom() {
       return this.scrolling.arrivedState.bottom;

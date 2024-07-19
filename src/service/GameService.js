@@ -10,6 +10,15 @@ export default class GameService {
       });
   }
 
+  async search(search) {
+    return http
+      .get(`/game/search/${search}`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
   async getAllPriorities() {
     return http
       .get(`/game/priorities`)

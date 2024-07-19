@@ -2,9 +2,6 @@ import http from '@/http-common';
 
 export default class ReportService {
   async getByGames(startDate, endDate) {
-    debugger;
-    console.log('startDate', startDate);
-    console.log('endDate', endDate);
     return http
       .get(`/report/game`, {
         params: {

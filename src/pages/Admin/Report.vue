@@ -16,41 +16,34 @@
     </v-row>
 
     <v-row style="justify-content: center">
-      <v-col cols="12">
-        <v-row
-          style="
-            background-color: rgba(0, 0, 0, 0.87);
-            border-radius: 10px;
-            text-align: -webkit-center;
-          "
-        >
-          <v-col class="pl-4 pt-8">
-            <v-date-input
-              v-model="range"
-              label="Selecionar período"
-              max-width="368"
-              multiple="range"
-            ></v-date-input>
-          </v-col>
-
-          <v-col style="align-content: center">
-            <v-btn
-              style="color: #000; background-color: white"
-              class="button"
-              @click="activateFilter()"
-            >
-              Filtrar
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-col>
+      <v-col cols="12"> </v-col>
 
       <v-col class="pl-0 pr-0">
         <v-card>
           <template v-slot:text>
+            <v-row style="border-radius: 10px">
+              <v-col class="pl-4 pt-8">
+                <v-date-input
+                  v-model="range"
+                  label="Selecionar período"
+                  max-width="368"
+                  multiple="range"
+                ></v-date-input>
+              </v-col>
+
+              <v-col style="align-content: center; float: inline-end">
+                <v-btn
+                  style="color: #000; background-color: white"
+                  class="button"
+                  @click="activateFilter()"
+                >
+                  Filtrar
+                </v-btn>
+              </v-col>
+            </v-row>
             <v-text-field
               v-model="search"
-              label="Search"
+              label="Buscar"
               prepend-inner-icon="mdi-magnify"
               variant="outlined"
               hide-details
@@ -102,8 +95,9 @@ export default {
         this.loading = true;
         if (startDate && endDate) this.range = [startDate, endDate];
         startDate = this.range[0];
+        startDate = new Date(startDate.setHours(0, 0, 0, 0));
         endDate = this.range[this.range.length - 1];
-        if (startDate === endDate) endDate = new Date();
+        endDate = new Date(endDate.setHours(23, 59, 59, 999));
         const response = await this.reportService.getByGames(startDate, endDate);
         this.report = response.data?.report;
         this.headers = response.data?.headers;
@@ -116,11 +110,12 @@ export default {
     },
     async getByProviders() {
       try {
-        this.loading;
-        const response = await this.reportService.getByProviders(
-          this.range[0],
-          this.range[this.range.length - 1]
-        );
+        this.loading = true;
+        let startDate = this.range[0];
+        startDate = new Date(startDate.setHours(0, 0, 0, 0));
+        let endDate = this.range[this.range.length - 1];
+        endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        const response = await this.reportService.getByProviders(startDate, endDate);
         this.report = response.data?.report;
         this.headers = response.data?.headers;
         this.selectedFilter = 'provider';
@@ -133,7 +128,11 @@ export default {
     async getByPlayers() {
       try {
         this.loading = true;
-        const response = await this.reportService.getByPlayers(this.range[0], this.range[-1]);
+        let startDate = this.range[0];
+        startDate = new Date(startDate.setHours(0, 0, 0, 0));
+        let endDate = this.range[this.range.length - 1];
+        endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        const response = await this.reportService.getByPlayers(startDate, endDate);
         this.report = response.data?.report;
         this.headers = response.data?.headers;
         this.selectedFilter = 'player';

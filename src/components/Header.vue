@@ -142,7 +142,11 @@ export default {
     },
   },
   created() {
-    if (this.userState?._user?.isAdmin) {
+    if (
+      this.userState?._user?.isAdmin ||
+      this.userState?._user?.role === 3 ||
+      this.userState?._user?.role === 6
+    ) {
       this.items.unshift({
         title: 'Painel',
         onClick: () => {

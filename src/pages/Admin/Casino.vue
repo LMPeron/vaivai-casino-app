@@ -18,11 +18,16 @@
             class="list-group-item bg-gray-300 rounded-md text-center"
             v-for="game in priorityByCategory"
             :key="game.id"
+            @dblclick="priorityGameList.splice(priorityGameList.indexOf(game), 1)"
           >
             <img
               :src="
                 game.Provider?.Platform?.reference === 'softswiss'
-                  ? `https://cdn.softswiss.net/i/s4/${game.Provider?.reference}/${game.identifier2}.png`
+                  ? `https://cdn.softswiss.net/i/s2/${game.Provider?.reference}/${
+                      game.identifier.split(':')[1]
+                        ? game.identifier.split(':')[1]
+                        : game.identifier
+                    }.png`
                   : game.imgUrl
               "
               alt=""
@@ -36,28 +41,24 @@
     </div>
     <div>
       <span class="label">Jogos</span>
-      <v-card class="card">
-        <draggable
-          v-bind="dragOptions"
-          class="dragArea flex flex-wrap w-full list-group"
-          :list="categoryList[selectedCategory] || gameList"
-          @change="log"
+      <v-card class="card pt-2">
+        <div
+          class="list-group-item bg-gray-300 rounded-md text-center"
+          v-for="game in categoryList[selectedCategory] || gameList"
+          :key="game.id"
+          @dblclick="priorityGameList.push(game)"
         >
-          <div
-            class="list-group-item bg-gray-300 rounded-md text-center"
-            v-for="game in categoryList[selectedCategory] || gameList"
-            :key="game.id"
-          >
-            <img
-              :src="
-                game.Provider?.Platform?.reference === 'softswiss'
-                  ? `https://cdn.softswiss.net/i/s4/${game.Provider?.reference}/${game.identifier2}.png`
-                  : game.imgUrl
-              "
-              alt=""
-            />
-          </div>
-        </draggable>
+          <img
+            :src="
+              game.Provider?.Platform?.reference === 'softswiss'
+                ? `https://cdn.softswiss.net/i/s2/${game.Provider?.reference}/${
+                    game.identifier.split(':')[1] ? game.identifier.split(':')[1] : game.identifier
+                  }.png`
+                : game.imgUrl
+            "
+            alt=""
+          />
+        </div>
       </v-card>
     </div>
   </div>
