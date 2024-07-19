@@ -13,6 +13,12 @@
       <v-col class="button-col">
         <v-btn class="button" @click="getByPlayers()"> Jogadores </v-btn>
       </v-col>
+      <v-col class="button-col">
+        <v-btn class="button" @click="getByScalpers()"> Cambistas </v-btn>
+      </v-col>
+      <v-col class="button-col">
+        <v-btn class="button" @click="getByManagers()"> Gerente </v-btn>
+      </v-col>
     </v-row>
 
     <v-row style="justify-content: center">
@@ -68,10 +74,41 @@
                 <td class="table-value">{{ item.prizeAmount }}</td>
                 <td class="table-value">{{ item.betQuantity }}</td>
                 <td class="table-value">{{ item.balance }}</td>
-
                 <td class="table-value">
                   <v-btn
                     @click="$router.push(`/admin/report/player/${item.name}`)"
+                    style="background-color: white; color: black"
+                    >Detalhes</v-btn
+                  >
+                </td>
+              </tr>
+            </template>
+            <template v-else-if="selectedFilter === 'scalper'" v-slot:item="{ item }">
+              <tr>
+                <td>{{ item.name }}</td>
+                <td class="table-value">{{ item.betAmount }}</td>
+                <td class="table-value">{{ item.prizeAmount }}</td>
+                <td class="table-value">{{ item.profit }}</td>
+                <td class="table-value">{{ item.betQuantity }}</td>
+                <td class="table-value">
+                  <v-btn
+                    @click="$router.push(`/admin/report/scalper/${item.name}`)"
+                    style="background-color: white; color: black"
+                    >Detalhes</v-btn
+                  >
+                </td>
+              </tr>
+            </template>
+            <template v-else-if="selectedFilter === 'manager'" v-slot:item="{ item }">
+              <tr>
+                <td>{{ item.name }}</td>
+                <td class="table-value">{{ item.betAmount }}</td>
+                <td class="table-value">{{ item.prizeAmount }}</td>
+                <td class="table-value">{{ item.profit }}</td>
+                <td class="table-value">{{ item.betQuantity }}</td>
+                <td class="table-value">
+                  <v-btn
+                    @click="$router.push(`/admin/report/manager/${item.name}`)"
                     style="background-color: white; color: black"
                     >Detalhes</v-btn
                   >
@@ -159,6 +196,40 @@ export default {
         this.loading = false;
       }
     },
+    async getByScalpers() {
+      try {
+        this.loading = true;
+        let startDate = this.range[0];
+        startDate = new Date(startDate.setHours(0, 0, 0, 0));
+        let endDate = this.range[this.range.length - 1];
+        endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        const response = await this.reportService.getByScalpers(startDate, endDate);
+        this.report = response.data?.report;
+        this.headers = response.data?.headers;
+        this.selectedFilter = 'scalper';
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async getByManagers() {
+      try {
+        this.loading = true;
+        let startDate = this.range[0];
+        startDate = new Date(startDate.setHours(0, 0, 0, 0));
+        let endDate = this.range[this.range.length - 1];
+        endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        const response = await this.reportService.getByManagers(startDate, endDate);
+        this.report = response.data?.report;
+        this.headers = response.data?.headers;
+        this.selectedFilter = 'manager';
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
     activateFilter() {
       if (this.selectedFilter === 'game') {
         this.getByGames();
@@ -166,6 +237,8 @@ export default {
         this.getByProviders();
       } else if (this.selectedFilter === 'player') {
         this.getByPlayers();
+      } else if (this.selectedFilter === 'scalper') {
+        this.getByScalpers();
       }
     },
     formatDate(date) {

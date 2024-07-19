@@ -56,6 +56,14 @@ const routes = [
         path: 'report/player/:username',
         component: () => import('@/pages/Admin/Player.vue'),
       },
+      {
+        path: 'report/scalper/:username',
+        component: () => import('@/pages/Admin/Scalper.vue'),
+      },
+      {
+        path: 'report/manager/:username',
+        component: () => import('@/pages/Admin/Manager.vue'),
+      },
     ],
   },
 ];
