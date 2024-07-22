@@ -25,36 +25,45 @@
       <v-col cols="12"> </v-col>
 
       <v-col class="pl-0 pr-0">
-        <v-card>
+        <v-card class="mb-4">
+          <template v-slot:title>
+            <!-- <span>RESUMO DE {{ formatDate(this.range[0]) }} A {{ formatDate(this.range[0]) }}</span> -->
+          </template>
           <template v-slot:text>
             <v-row style="border-radius: 10px">
-              <v-col class="pl-4 pt-8">
-                <v-date-input
-                  v-model="range"
-                  label="Selecionar período"
-                  max-width="368"
-                  multiple="range"
-                ></v-date-input>
+              <v-col class="pl-4 pt-8 d-flex">
+                <v-row>
+                  <v-col>
+                    <v-date-input
+                      v-model="range"
+                      label="Selecionar período"
+                      max-width="368"
+                      multiple="range"
+                    ></v-date-input>
+                  </v-col>
+                  <v-col style="align-content: center">
+                    <v-btn
+                      style="color: #000; background-color: white; align-self: center"
+                      class="button"
+                      @click="activateFilter()"
+                    >
+                      Filtrar
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-col>
 
-              <v-col style="align-content: center; float: inline-end">
-                <v-btn
-                  style="color: #000; background-color: white"
-                  class="button"
-                  @click="activateFilter()"
-                >
-                  Filtrar
-                </v-btn>
+              <v-col style="align-content: center">
+                <v-text-field
+                  v-model="search"
+                  label="Buscar"
+                  prepend-inner-icon="mdi-magnify"
+                  variant="outlined"
+                  hide-details
+                  single-line
+                ></v-text-field>
               </v-col>
             </v-row>
-            <v-text-field
-              v-model="search"
-              label="Buscar"
-              prepend-inner-icon="mdi-magnify"
-              variant="outlined"
-              hide-details
-              single-line
-            ></v-text-field>
           </template>
           <v-data-table-virtual
             no-data-text="Nenhum dado encontrado"
@@ -68,52 +77,44 @@
               <v-skeleton-loader type="table-row@8"></v-skeleton-loader>
             </template>
             <template v-if="selectedFilter === 'player'" v-slot:item="{ item }">
-              <tr>
-                <td>{{ item.name }}</td>
+              <tr @click="$router.push(`/admin/report/player/${item.name}`)">
+                <td style="width: 20%">{{ item.name }}</td>
                 <td class="table-value">{{ item.betAmount }}</td>
                 <td class="table-value">{{ item.prizeAmount }}</td>
+                <td class="table-value">{{ item.profit }}</td>
                 <td class="table-value">{{ item.betQuantity }}</td>
                 <td class="table-value">{{ item.balance }}</td>
-                <td class="table-value">
-                  <v-btn
-                    @click="$router.push(`/admin/report/player/${item.name}`)"
-                    style="background-color: white; color: black"
-                    >Detalhes</v-btn
-                  >
-                </td>
               </tr>
             </template>
             <template v-else-if="selectedFilter === 'scalper'" v-slot:item="{ item }">
-              <tr>
-                <td>{{ item.name }}</td>
+              <tr @click="$router.push(`/admin/report/scalper/${item.name}`)">
+                <td style="width: 20%">{{ item.name }}</td>
                 <td class="table-value">{{ item.betAmount }}</td>
                 <td class="table-value">{{ item.prizeAmount }}</td>
                 <td class="table-value">{{ item.profit }}</td>
                 <td class="table-value">{{ item.betQuantity }}</td>
-                <td class="table-value">
-                  <v-btn
-                    @click="$router.push(`/admin/report/scalper/${item.name}`)"
-                    style="background-color: white; color: black"
-                    >Detalhes</v-btn
-                  >
-                </td>
               </tr>
             </template>
             <template v-else-if="selectedFilter === 'manager'" v-slot:item="{ item }">
-              <tr>
+              <tr @click="$router.push(`/admin/report/manager/${item.name}`)">
                 <td>{{ item.name }}</td>
                 <td class="table-value">{{ item.betAmount }}</td>
                 <td class="table-value">{{ item.prizeAmount }}</td>
                 <td class="table-value">{{ item.profit }}</td>
                 <td class="table-value">{{ item.betQuantity }}</td>
-                <td class="table-value">
-                  <v-btn
-                    @click="$router.push(`/admin/report/manager/${item.name}`)"
-                    style="background-color: white; color: black"
-                    >Detalhes</v-btn
-                  >
-                </td>
               </tr>
+            </template>
+          </v-data-table-virtual>
+          <v-data-table-virtual
+            no-data-text="Nenhum dado encontrado"
+            :loading="loading"
+            :headers="headersTotal"
+            :items="total"
+            :search="search"
+            item-value="name"
+          >
+            <template v-slot:loading>
+              <v-skeleton-loader type="table-row@1"></v-skeleton-loader>
             </template>
           </v-data-table-virtual>
         </v-card>
@@ -132,11 +133,15 @@ export default {
     return {
       reportService: new ReportService(),
       report: [],
+      total: [],
       headers: [],
+      headersTotal: [],
       search: '',
       loading: false,
       range: null,
       showByRangeInput: false,
+      startDate: '',
+      endDate: '',
       selectedFilter: 'game',
     };
   },
@@ -152,9 +157,13 @@ export default {
         startDate = new Date(startDate.setHours(0, 0, 0, 0));
         endDate = this.range[this.range.length - 1];
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        this.startDate = startDate;
+        this.endDate = endDate;
         const response = await this.reportService.getByGames(startDate, endDate);
         this.report = response.data?.report;
+        this.total = response.data?.total;
         this.headers = response.data?.headers;
+        this.headersTotal = response.data?.headersTotal;
         this.selectedFilter = 'game';
       } catch (error) {
         console.error(error);
@@ -171,6 +180,8 @@ export default {
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
         const response = await this.reportService.getByProviders(startDate, endDate);
         this.report = response.data?.report;
+        this.total = response.data?.total;
+        this.headersTotal = response.data?.headersTotal;
         this.headers = response.data?.headers;
         this.selectedFilter = 'provider';
       } catch (error) {
@@ -188,7 +199,9 @@ export default {
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
         const response = await this.reportService.getByPlayers(startDate, endDate);
         this.report = response.data?.report;
+        this.total = response.data?.total;
         this.headers = response.data?.headers;
+        this.headersTotal = response.data?.headersTotal;
         this.selectedFilter = 'player';
       } catch (error) {
         console.error(error);
@@ -205,7 +218,9 @@ export default {
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
         const response = await this.reportService.getByScalpers(startDate, endDate);
         this.report = response.data?.report;
+        this.total = response.data?.total;
         this.headers = response.data?.headers;
+        this.headersTotal = response.data?.headersTotal;
         this.selectedFilter = 'scalper';
       } catch (error) {
         console.error(error);
@@ -223,6 +238,8 @@ export default {
         const response = await this.reportService.getByManagers(startDate, endDate);
         this.report = response.data?.report;
         this.headers = response.data?.headers;
+        this.total = response.data?.total;
+        this.headersTotal = response.data?.headersTotal;
         this.selectedFilter = 'manager';
       } catch (error) {
         console.error(error);
@@ -239,11 +256,19 @@ export default {
         this.getByPlayers();
       } else if (this.selectedFilter === 'scalper') {
         this.getByScalpers();
+      } else if (this.selectedFilter === 'manager') {
+        this.getByManagers();
       }
+    },
+    formatDateDay(date) {
+      return format(date, 'dd/MM/yyyy');
+    },
+    formatDateTime(date) {
+      return format(date, 'dd/MM/yyyy HH:mm:ss');
     },
     formatDate(date) {
       const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+      const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
       return `${day}/${month}/${year}`;
     },
@@ -283,5 +308,14 @@ export default {
 
 .table-value {
   text-align: end;
+  width: 20%;
+}
+
+tr {
+  cursor: pointer;
+}
+
+tr:hover {
+  background-color: rgba(0, 0, 0, 0.08);
 }
 </style>

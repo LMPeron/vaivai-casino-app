@@ -2,36 +2,42 @@
   <div style="background-color: rgb(241, 241, 241); width: 100%; height: 100%" class="px-10 pt-4">
     <v-row style="justify-content: center">
       <v-col class="pl-0 pr-0">
-        <v-card>
+        <v-card class="mb-4">
           <template v-slot:text>
             <v-row style="border-radius: 10px">
-              <v-col class="pl-4 pt-8">
-                <v-date-input
-                  v-model="range"
-                  label="Selecionar período"
-                  max-width="368"
-                  multiple="range"
-                ></v-date-input>
+              <v-col class="pl-4 pt-8 d-flex">
+                <v-row>
+                  <v-col>
+                    <v-date-input
+                      v-model="range"
+                      label="Selecionar período"
+                      max-width="368"
+                      multiple="range"
+                    ></v-date-input>
+                  </v-col>
+                  <v-col style="align-content: center">
+                    <v-btn
+                      style="color: #000; background-color: white; align-self: center"
+                      class="button"
+                      @click="getPlayerHistory()"
+                    >
+                      Filtrar
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-col>
 
-              <v-col style="align-content: center; float: inline-end">
-                <v-btn
-                  style="color: #000; background-color: white"
-                  class="button"
-                  @click="getPlayerHistory()"
-                >
-                  Filtrar
-                </v-btn>
+              <v-col style="align-content: center">
+                <v-text-field
+                  v-model="search"
+                  label="Buscar"
+                  prepend-inner-icon="mdi-magnify"
+                  variant="outlined"
+                  hide-details
+                  single-line
+                ></v-text-field>
               </v-col>
             </v-row>
-            <v-text-field
-              v-model="search"
-              label="Buscar"
-              prepend-inner-icon="mdi-magnify"
-              variant="outlined"
-              hide-details
-              single-line
-            ></v-text-field>
           </template>
           <v-data-table-virtual
             no-data-text="Nenhum dado encontrado"
@@ -49,7 +55,7 @@
                 <td>{{ item.label }}</td>
                 <td>{{ item.Game.title }}</td>
                 <td class="table-value">{{ currency(item.amount / 100) }}</td>
-                <td class="table-value">{{ item.processedAt }}</td>
+                <td class="table-value">{{ formatDate(item.processedAt) }}</td>
                 <td class="table-value">{{ currency(item.userBalance / 100) }}</td>
               </tr>
             </template>
@@ -63,6 +69,7 @@
 <script>
 import ReportService from '@/service/ReportService';
 import { VDateInput } from 'vuetify/labs/VDateInput';
+import { format } from 'date-fns';
 
 export default {
   name: 'Report',
@@ -70,7 +77,9 @@ export default {
     return {
       reportService: new ReportService(),
       report: [],
+      total: [],
       headers: [],
+      headersTotal: [],
       search: '',
       loading: false,
       range: null,
@@ -94,7 +103,9 @@ export default {
           this.username
         );
         this.report = response.data?.report;
+        this.total = response.data?.total;
         this.headers = response.data?.headers;
+        this.headersTotal = response.data?.headersTotal;
       } catch (error) {
         console.error(error);
       } finally {
@@ -103,6 +114,9 @@ export default {
     },
     getRouteParams() {
       this.username = this.$route.params.username;
+    },
+    formatDate(date) {
+      return format(date, 'dd/MM/yyyy HH:mm:ss');
     },
     currency(value) {
       if (!value) return 'R$ 0,00';
