@@ -2,7 +2,10 @@
   <v-container class="fill-height">
     <v-row no-gutters>
       <v-col cols="12" class="mb-2">
-        <span class="category-label"> Top Brasil - Bingo <img style="width: 22px; padding-left: 5px;" src="../assets/brasil.png"> </img> </span>
+        <span class="category-label">
+          Ortiz Gaming
+          <!-- <img style="width: 22px; padding-left: 5px;" src="../assets/brasil.png"> </img>  -->
+        </span>
       </v-col>
       <v-col
         class="px-1 r-height"

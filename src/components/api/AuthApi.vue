@@ -4,6 +4,7 @@
 
 <script>
 import userStore from '@/stores/user';
+import ENVIROMENT from '@/env';
 
 export default {
   data: () => ({
@@ -18,7 +19,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.user.logout();
-        window.location.replace('https://pitstopbet.com/?page=cassino');
+        window.location.replace(ENVIROMENT.MAIN_APP_URL);
       }
     },
   },

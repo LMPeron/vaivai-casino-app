@@ -14,7 +14,7 @@
         <div
           class="d-flex align-center"
           style="cursor: pointer"
-          @click="redirect('https://pitstopbet.com/?page=cassino')"
+          @click="redirect(ENVIROMENT.MAIN_APP_URL)"
         >
           <img class="pl-2" :width="isMobile ? '50px' : '100px '" src="../assets/logo.png" alt="" />
         </div>
@@ -31,7 +31,7 @@
       <span
         class="pl-4"
         style="cursor: pointer; font-size: medium"
-        @click="redirect('https://pitstopbet.com/?page=cassino')"
+        @click="redirect(ENVIROMENT.MAIN_APP_URL)"
         >LOTERIA</span
       >
       <span class="pl-4" style="cursor: pointer; font-size: medium">ESPORTES</span>
@@ -95,6 +95,7 @@
 
 <script>
 import userStore from '@/stores/user';
+import ENVIROMENT from '@/env';
 
 export default {
   data() {
@@ -105,7 +106,7 @@ export default {
       items: [
         {
           title: 'Sair',
-          onClick: () => window.location.replace('https://pitstopbet.com/?page=cassino'),
+          onClick: () => window.location.replace(ENVIROMENT.MAIN_APP_URL),
         },
       ],
     };

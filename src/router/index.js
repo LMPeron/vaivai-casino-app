@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AppLayoutAdmin from '@/layouts/AppLayoutAdmin.vue';
 import useUserStore from '@/stores/user.js';
+import ENVIROMENT from '@/env';
 
 const routes = [
   {
@@ -84,7 +85,7 @@ router.beforeEach((to, _from, next) => {
   if (to.matched.some((record) => record.meta?.requiresAuth)) {
     const store = useUserStore();
     if (store.token) next();
-    else window.location.replace('https://pitstopbet.com/?page=cassino');
+    else window.location.replace(ENVIROMENT.MAIN_APP_URL);
   }
   next();
 });

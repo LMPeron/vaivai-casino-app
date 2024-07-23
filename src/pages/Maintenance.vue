@@ -8,7 +8,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="refreshPage"> Tentar Novamente </v-btn>
+          <v-btn color="primary" @click="refreshPage"> Retornar </v-btn>
         </v-card-actions>
       </v-card>
     </v-container>
@@ -16,11 +16,13 @@
 </template>
 
 <script>
+import ENVIROMENT from '@/env';
+
 export default {
   name: 'MaintenancePage',
   methods: {
     refreshPage() {
-      window.location.reload();
+      window.location.replace(ENVIROMENT.MAIN_APP_URL);
     },
   },
 };
