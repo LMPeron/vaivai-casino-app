@@ -9,6 +9,10 @@ const routes = [
     component: () => import('@/pages/AuthMiddleware.vue'),
   },
   {
+    path: '/maintenance',
+    component: () => import('@/pages/Maintenance.vue'),
+  },
+  {
     path: '/',
     component: AppLayout,
     meta: {

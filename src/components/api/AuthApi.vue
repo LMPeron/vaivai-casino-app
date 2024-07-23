@@ -13,6 +13,7 @@ export default {
   methods: {
     async renewToken() {
       try {
+        // this.$router.push({ path: '/maintenance' });
         if (this.user.token) await this.user.renewToken();
       } catch (error) {
         console.log(error);
