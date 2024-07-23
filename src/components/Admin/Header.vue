@@ -63,6 +63,7 @@ import userStore from '@/stores/user';
 import ENVIROMENT from '@/env';
 
 export default {
+  name: 'HeaderAdmin',
   data() {
     return {
       userState: userStore(),

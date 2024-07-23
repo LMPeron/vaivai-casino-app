@@ -98,11 +98,12 @@ import userStore from '@/stores/user';
 import ENVIROMENT from '@/env';
 
 export default {
+  name: 'Header',
   data() {
     return {
       userState: userStore(),
       windowWidth: window.innerWidth,
-      showBalance: false,
+      showBalance: true,
       items: [
         {
           title: 'Sair',
