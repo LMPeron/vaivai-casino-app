@@ -76,19 +76,23 @@
             <template v-slot:loading>
               <v-skeleton-loader type="table-row@8"></v-skeleton-loader>
             </template>
+
             <template v-if="selectedFilter === 'player'" v-slot:item="{ item }">
-              <tr @click="$router.push(`/admin/report/player/${item.name}`)">
-                <td style="width: 20%">{{ item.name }}</td>
+              <tr @click="$router.push(`/admin/report/player/${item.username}`)">
+                <td>{{ item.username }}</td>
+                <td class="table-value">{{ formatPhone(item.phone) }}</td>
                 <td class="table-value">{{ item.betAmount }}</td>
                 <td class="table-value">{{ item.prizeAmount }}</td>
                 <td class="table-value">{{ item.profit }}</td>
                 <td class="table-value">{{ item.betQuantity }}</td>
                 <td class="table-value">{{ item.balance }}</td>
+                <td style="display: none">{{ item.document }}</td>
               </tr>
             </template>
             <template v-else-if="selectedFilter === 'scalper'" v-slot:item="{ item }">
               <tr @click="$router.push(`/admin/report/scalper/${item.name}`)">
                 <td style="width: 20%">{{ item.name }}</td>
+                <td class="table-value"></td>
                 <td class="table-value">{{ item.betAmount }}</td>
                 <td class="table-value">{{ item.prizeAmount }}</td>
                 <td class="table-value">{{ item.profit }}</td>
@@ -106,6 +110,7 @@
             </template>
           </v-data-table-virtual>
           <v-data-table-virtual
+            v-if="!search"
             no-data-text="Nenhum dado encontrado"
             :loading="loading"
             :headers="headersTotal"
@@ -260,6 +265,9 @@ export default {
         this.getByManagers();
       }
     },
+    formatPhone(phone) {
+      return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    },
     formatDateDay(date) {
       return format(date, 'dd/MM/yyyy');
     },
@@ -308,7 +316,7 @@ export default {
 
 .table-value {
   text-align: end;
-  width: 20%;
+  /* width: 20%; */
 }
 
 tr {
@@ -317,5 +325,9 @@ tr {
 
 tr:hover {
   background-color: rgba(0, 0, 0, 0.08);
+}
+
+.hidden {
+  display: none;
 }
 </style>
