@@ -20,11 +20,13 @@ import Footer from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import AuthApi from '@/components/api/AuthApi.vue';
 import appStore from '@/stores/app';
+import userStore from '@/stores/user';
 
 export default {
   name: 'Main',
   data() {
     return {
+      userState: userStore(),
       appState: appStore(),
       loading: false,
       isSidebarOpen: false,
@@ -34,20 +36,6 @@ export default {
             title: 'Dashboard',
             icon: 'mdi-view-dashboard',
             value: 'dashboard',
-          },
-        ],
-        Cassino: [
-          {
-            title: 'Cassino',
-            icon: 'mdi-slot-machine',
-            value: 'casino',
-          },
-        ],
-        Banner: [
-          {
-            title: 'Banner',
-            icon: 'mdi-image-area',
-            value: 'banner',
           },
         ],
         Relatorio: [
@@ -73,6 +61,25 @@ export default {
     isMobile() {
       return window.innerWidth <= 768;
     },
+  },
+
+  created() {
+    if (this.userState?._user?.role > 6) {
+      this.sidebarCategories.Cassino = [
+        {
+          title: 'Cassino',
+          icon: 'mdi-slot-machine',
+          value: 'casino',
+        },
+      ];
+      this.sidebarCategories.Banner = [
+        {
+          title: 'Banner',
+          icon: 'mdi-image-area',
+          value: 'banner',
+        },
+      ];
+    }
   },
 
   mounted() {

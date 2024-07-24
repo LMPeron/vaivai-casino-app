@@ -100,7 +100,7 @@
     </v-row>
 
     <span class="label">Esportes</span>
-    <v-row class="pt-2 pb-4">
+    <v-row v-if="userState._user.role > 6" class="pt-2 pb-4">
       <v-col cols="12" md="3">
         <v-card class="card">
           <v-card-item>

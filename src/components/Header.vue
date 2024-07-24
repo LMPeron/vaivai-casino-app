@@ -14,7 +14,7 @@
         <div
           class="d-flex align-center"
           style="cursor: pointer"
-          @click="redirect(ENVIROMENT.MAIN_APP_URL)"
+          @click="redirect('https://vaivaibet.com/?page=cassino')"
         >
           <img class="pl-2" :width="isMobile ? '50px' : '100px '" src="../assets/logo.png" alt="" />
         </div>
@@ -31,7 +31,7 @@
       <span
         class="pl-4"
         style="cursor: pointer; font-size: medium"
-        @click="redirect(ENVIROMENT.MAIN_APP_URL)"
+        @click="redirect('https://vaivaibet.com/?page=cassino')"
         >LOTERIA</span
       >
       <span class="pl-4" style="cursor: pointer; font-size: medium">ESPORTES</span>
@@ -107,7 +107,7 @@ export default {
       items: [
         {
           title: 'Sair',
-          onClick: () => window.location.replace(ENVIROMENT.MAIN_APP_URL),
+          onClick: () => window.location.replace('https://vaivaibet.com/?page=cassino'),
         },
       ],
     };
@@ -144,11 +144,7 @@ export default {
     },
   },
   created() {
-    if (
-      this.userState?._user?.isAdmin ||
-      this.userState?._user?.role === 3 ||
-      this.userState?._user?.role === 6
-    ) {
+    if (this.userState?._user?.role > 1) {
       this.items.unshift({
         title: 'Painel',
         onClick: () => {

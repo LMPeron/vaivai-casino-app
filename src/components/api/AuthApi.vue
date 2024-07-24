@@ -19,7 +19,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.user.logout();
-        window.location.replace(ENVIROMENT.MAIN_APP_URL);
+        window.location.replace('https://vaivaibet.com/?page=cassino');
       }
     },
   },

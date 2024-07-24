@@ -13,10 +13,10 @@
       <v-col class="button-col">
         <v-btn class="button" @click="getByPlayers()"> Jogadores </v-btn>
       </v-col>
-      <v-col class="button-col">
+      <v-col class="button-col" v-if="userState._user.role > 3">
         <v-btn class="button" @click="getByScalpers()"> Cambistas </v-btn>
       </v-col>
-      <v-col class="button-col">
+      <v-col class="button-col" v-if="userState._user.role > 6">
         <v-btn class="button" @click="getByManagers()"> Gerente </v-btn>
       </v-col>
     </v-row>
@@ -79,7 +79,7 @@
 
             <template v-if="selectedFilter === 'player'" v-slot:item="{ item }">
               <tr @click="$router.push(`/admin/report/player/${item.username}`)">
-                <td>{{ item.username }}</td>
+                <td>{{ item.role }}: {{ item.username }}</td>
                 <td class="table-value">{{ formatPhone(item.phone) }}</td>
                 <td class="table-value">{{ item.betAmount }}</td>
                 <td class="table-value">{{ item.prizeAmount }}</td>
@@ -90,9 +90,8 @@
               </tr>
             </template>
             <template v-else-if="selectedFilter === 'scalper'" v-slot:item="{ item }">
-              <tr @click="$router.push(`/admin/report/scalper/${item.name}`)">
-                <td style="width: 20%">{{ item.name }}</td>
-                <td class="table-value"></td>
+              <tr @click="$router.push(`/admin/report/scalper/${item.username}`)">
+                <td style="width: 20%">{{ item.username }}</td>
                 <td class="table-value">{{ item.betAmount }}</td>
                 <td class="table-value">{{ item.prizeAmount }}</td>
                 <td class="table-value">{{ item.profit }}</td>
@@ -131,12 +130,14 @@
 <script>
 import ReportService from '@/service/ReportService';
 import { VDateInput } from 'vuetify/labs/VDateInput';
+import userStore from '@/stores/user';
 
 export default {
   name: 'Report',
   data() {
     return {
       reportService: new ReportService(),
+      userState: userStore(),
       report: [],
       total: [],
       headers: [],

@@ -85,7 +85,7 @@ router.beforeEach((to, _from, next) => {
   if (to.matched.some((record) => record.meta?.requiresAuth)) {
     const store = useUserStore();
     if (store.token) next();
-    else window.location.replace(ENVIROMENT.MAIN_APP_URL);
+    else window.location.replace('https://vaivaibet.com/?page=cassino');
   }
   next();
 });

@@ -51,13 +51,15 @@
               <v-skeleton-loader type="table-row@8"></v-skeleton-loader>
             </template>
             <template v-slot:item="{ item }">
-              <tr @click="$router.push(`/admin/report/player/${item.name}`)">
-                <td>{{ item.name }}</td>
+              <tr @click="$router.push(`/admin/report/player/${item.username}`)">
+                <td>{{ item.role }}: {{ item.username }}</td>
+                <td class="table-value">{{ item.phone }}</td>
                 <td class="table-value">{{ item.betAmount }}</td>
                 <td class="table-value">{{ item.prizeAmount }}</td>
                 <td class="table-value">{{ item.profit }}</td>
                 <td class="table-value">{{ item.betQuantity }}</td>
                 <td class="table-value">{{ item.balance }}</td>
+                <td style="display: none">{{ item.document }}</td>
               </tr>
             </template>
           </v-data-table-virtual>
@@ -130,6 +132,9 @@ export default {
     currency(value) {
       if (!value) return 'R$ 0,00';
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    },
+    formatPhone(phone) {
+      return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
     },
   },
   created() {
