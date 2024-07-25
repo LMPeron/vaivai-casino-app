@@ -38,11 +38,7 @@
           max-width="368"
           multiple="range"
         ></v-date-input>
-        <v-btn
-          style="color: #000; background-color: white"
-          class="button"
-          @click="getRangeDashboard()"
-        >
+        <v-btn style="color: #000; background-color: white" class="button" @click="getDashboard()">
           Filtrar
         </v-btn>
       </v-col>
@@ -59,7 +55,8 @@
           </v-card-item>
 
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.action?.bet?.amount) }}
             </span>
             <span style="float: inline-end"> {{ report.action?.bet?.quantity }} </span>
@@ -75,10 +72,13 @@
           </v-card-item>
 
           <v-card-text>
-            <span>
-              {{ formatCurrencyBRL(report.action?.prize?.amount) }}
-            </span>
-            <span style="float: inline-end"> {{ report.action?.prize?.quantity }} </span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <div v-else>
+              <span>
+                {{ formatCurrencyBRL(report.action?.prize?.amount) }}
+              </span>
+              <span style="float: inline-end"> {{ report.action?.prize?.quantity }} </span>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -91,7 +91,8 @@
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.action?.profit) }}
             </span>
           </v-card-text>
@@ -99,7 +100,7 @@
       </v-col>
     </v-row>
 
-    <span class="label">Esportes</span>
+    <span v-if="userState._user.role > 6" class="label">Esportes</span>
     <v-row v-if="userState._user.role > 6" class="pt-2 pb-4">
       <v-col cols="12" md="3">
         <v-card class="card">
@@ -109,7 +110,8 @@
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.sport?.apostado) }}
             </span>
           </v-card-text>
@@ -123,7 +125,8 @@
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.sport?.premio) }}
             </span>
           </v-card-text>
@@ -137,7 +140,8 @@
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.sport?.pendente) }}
             </span>
           </v-card-text>
@@ -151,7 +155,8 @@
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.sport?.pendente) }}
             </span>
           </v-card-text>
@@ -169,7 +174,8 @@
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.flow?.deposit?.amount) }}
             </span>
             <span style="float: inline-end"> {{ report.flow?.deposit?.quantity }} </span>
@@ -184,7 +190,8 @@
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.flow?.withdraw?.amount) }}
             </span>
             <span style="float: inline-end"> {{ report.flow?.withdraw?.quantity }} </span>
@@ -199,7 +206,8 @@
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.flow?.profit) }}
             </span>
           </v-card-text>
@@ -209,11 +217,12 @@
         <v-card class="card">
           <v-card-item>
             <v-card-title>
-              <span> Carteira de clientes </span>
+              <span> Carteira atual </span>
             </v-card-title>
           </v-card-item>
           <v-card-text>
-            <span>
+            <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+            <span v-else>
               {{ formatCurrencyBRL(report.flow?.totalBalance) }}
             </span>
           </v-card-text>
@@ -238,8 +247,8 @@ export default {
       loading: false,
       range: null,
       showByRangeInput: false,
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: '',
+      endDate: '',
     };
   },
   components: {
@@ -248,11 +257,20 @@ export default {
   methods: {
     async getDashboard(startDate, endDate) {
       try {
+        if (startDate && endDate) this.range = [startDate, endDate];
+        startDate = this.range[0];
+        startDate = new Date(startDate.setHours(0, 0, 0, 0));
+        endDate = this.range[this.range.length - 1];
+        endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.loading = true;
         const response = await this.adminService.getDashboard(startDate, endDate);
-        console.log(response);
         this.report = response.data?.report;
       } catch (error) {
         console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     formatCurrencyBRL(value) {
@@ -271,7 +289,7 @@ export default {
       const startDate = new Date(today.setHours(0, 0, 0, 0));
       this.startDate = startDate;
       this.endDate = new Date();
-      this.getDashboard(startDate, new Date()).finally(() => (this.loading = false));
+      this.getDashboard(startDate, new Date());
     },
     async getYesterdayDashboard() {
       this.loading = true;
@@ -282,7 +300,7 @@ export default {
       const endDate = new Date(yesterday.setHours(23, 59, 59, 999));
       this.startDate = startDate;
       this.endDate = endDate;
-      this.getDashboard(startDate, endDate).finally(() => (this.loading = false));
+      this.getDashboard(startDate, endDate);
     },
     async getLastWeekDashboard() {
       this.loading = true;
@@ -295,7 +313,7 @@ export default {
       endDate.setHours(23, 59, 59, 999);
       this.startDate = startDate;
       this.endDate = endDate;
-      this.getDashboard(startDate, endDate).finally(() => (this.loading = false));
+      this.getDashboard(startDate, endDate);
     },
     async getPastWeekDashboard() {
       this.loading = true;
@@ -308,11 +326,7 @@ export default {
       endDate.setHours(23, 59, 59, 999);
       this.startDate = startDate;
       this.endDate = endDate;
-      this.getDashboard(startDate, endDate).finally(() => (this.loading = false));
-    },
-    async getRangeDashboard() {
-      this.loading = true;
-      this.getDashboard(this.range[1], this.range[-1]).finally(() => (this.loading = false));
+      this.getDashboard(startDate, endDate);
     },
   },
   created() {

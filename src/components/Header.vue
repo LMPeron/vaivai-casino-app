@@ -34,7 +34,12 @@
         @click="redirect('https://vaivaibet.com/?page=cassino')"
         >LOTERIA</span
       >
-      <span class="pl-4" style="cursor: pointer; font-size: medium">ESPORTES</span>
+      <span
+        class="pl-4"
+        style="cursor: pointer; font-size: medium"
+        @click="redirect('https://vaivaibet.com/?page=inicio')"
+        >ESPORTES</span
+      >
     </v-col>
 
     <v-col cols="8" md="8" lg="4" sm="8" sx="2" style="align-content: center; text-align: end">
