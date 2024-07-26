@@ -1,5 +1,11 @@
 <template>
   <div style="background-color: rgb(241, 241, 241); width: 100%; height: 100%" class="px-10 pt-4">
+    <v-overlay class="align-center justify-center" v-model="loading">
+      <div>
+        <img class="pl-2" width="140px" src="../../assets/logo.png" alt="" />
+      </div>
+      <span style="color: black; text-align: center">Carregando Jogos...</span>
+    </v-overlay>
     <div class="flex mb-4">
       <v-select
         style="color: rgba(0, 0, 0, 0.87)"

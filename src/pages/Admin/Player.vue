@@ -3,6 +3,13 @@
     <v-row style="justify-content: center">
       <v-col class="pl-0 pr-0">
         <v-card class="mb-4">
+          <template v-slot:title>
+            <span
+              >RESUMO DE {{ formatDateDay(this.startDate) }} A {{ formatDateDay(this.startDate) }} -
+              CONSULTADO: {{ formatDateDay(this.requestDate) }} às
+              {{ formatTime(this.requestDate) }} de todos os JOGADORES</span
+            >
+          </template>
           <template v-slot:text>
             <v-row style="border-radius: 10px">
               <v-col class="pl-4 pt-8 d-flex">
@@ -55,7 +62,7 @@
                 <td>{{ item.label === 'bet' ? 'Aposta' : 'Ganho' }}</td>
                 <td>{{ item.Game.title }}</td>
                 <td class="table-value">{{ currency(item.amount / 100) }}</td>
-                <td class="table-value">{{ formatDate(item.processedAt) }}</td>
+                <td class="table-value">{{ formatDateTime(item.processedAt) }}</td>
                 <td class="table-value">{{ currency(item.userBalance / 100) }}</td>
               </tr>
             </template>
@@ -83,6 +90,9 @@ export default {
       search: '',
       loading: false,
       range: null,
+      startDate: '',
+      endDate: '',
+      requestDate: '',
     };
   },
   components: {
@@ -97,6 +107,9 @@ export default {
         startDate = new Date(startDate.setHours(0, 0, 0, 0));
         endDate = this.range[this.range.length - 1];
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.requestDate = new Date();
         const response = await this.reportService.getPlayerHistory(
           startDate,
           endDate,
@@ -115,7 +128,13 @@ export default {
     getRouteParams() {
       this.username = this.$route.params.username;
     },
-    formatDate(date) {
+    formatDateDay(date) {
+      return format(date, 'dd/MM/yyyy');
+    },
+    formatTime(date) {
+      return format(date, 'HH:mm:ss');
+    },
+    formatDateTime(date) {
       return format(date, 'dd/MM/yyyy HH:mm:ss');
     },
     currency(value) {

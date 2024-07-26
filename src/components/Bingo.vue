@@ -2,7 +2,7 @@
   <v-container class="fill-height">
     <v-row no-gutters>
       <v-col cols="12" class="mb-2">
-        <span class="category-label">
+        <span v-if="gameList && gameList.length > 0" class="category-label">
           Ortiz Gaming
           <!-- <img style="width: 22px; padding-left: 5px;" src="../assets/brasil.png"> </img>  -->
         </span>

@@ -27,7 +27,11 @@
       <v-col class="pl-0 pr-0">
         <v-card class="mb-4">
           <template v-slot:title>
-            <!-- <span>RESUMO DE {{ formatDate(this.range[0]) }} A {{ formatDate(this.range[0]) }}</span> -->
+            <span
+              >RESUMO DE {{ formatDate(this.startDate) }} A {{ formatDate(this.startDate) }} -
+              CONSULTADO: {{ formatDate(this.requestDate) }} às
+              {{ formatTime(this.requestDate) }} de todos os {{ mappedFilter }}</span
+            >
           </template>
           <template v-slot:text>
             <v-row style="border-radius: 10px">
@@ -131,6 +135,7 @@
 import ReportService from '@/service/ReportService';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import userStore from '@/stores/user';
+import { format } from 'date-fns';
 
 export default {
   name: 'Report',
@@ -148,6 +153,7 @@ export default {
       showByRangeInput: false,
       startDate: '',
       endDate: '',
+      requestDate: '',
       selectedFilter: 'game',
     };
   },
@@ -165,6 +171,7 @@ export default {
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
         this.startDate = startDate;
         this.endDate = endDate;
+        this.requestDate = new Date();
         const response = await this.reportService.getByGames(startDate, endDate);
         this.report = response.data?.report;
         this.total = response.data?.total;
@@ -184,6 +191,9 @@ export default {
         startDate = new Date(startDate.setHours(0, 0, 0, 0));
         let endDate = this.range[this.range.length - 1];
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.requestDate = new Date();
         const response = await this.reportService.getByProviders(startDate, endDate);
         this.report = response.data?.report;
         this.total = response.data?.total;
@@ -203,6 +213,9 @@ export default {
         startDate = new Date(startDate.setHours(0, 0, 0, 0));
         let endDate = this.range[this.range.length - 1];
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.requestDate = new Date();
         const response = await this.reportService.getByPlayers(startDate, endDate);
         this.report = response.data?.report;
         this.total = response.data?.total;
@@ -222,6 +235,9 @@ export default {
         startDate = new Date(startDate.setHours(0, 0, 0, 0));
         let endDate = this.range[this.range.length - 1];
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.requestDate = new Date();
         const response = await this.reportService.getByScalpers(startDate, endDate);
         this.report = response.data?.report;
         this.total = response.data?.total;
@@ -241,6 +257,9 @@ export default {
         startDate = new Date(startDate.setHours(0, 0, 0, 0));
         let endDate = this.range[this.range.length - 1];
         endDate = new Date(endDate.setHours(23, 59, 59, 999));
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.requestDate = new Date();
         const response = await this.reportService.getByManagers(startDate, endDate);
         this.report = response.data?.report;
         this.headers = response.data?.headers;
@@ -272,6 +291,9 @@ export default {
     formatDateDay(date) {
       return format(date, 'dd/MM/yyyy');
     },
+    formatTime(date) {
+      return format(date, 'HH:mm:ss');
+    },
     formatDateTime(date) {
       return format(date, 'dd/MM/yyyy HH:mm:ss');
     },
@@ -288,6 +310,15 @@ export default {
       this.startDate = startDate;
       this.endDate = new Date();
       this.getByGames(startDate, new Date()).finally(() => (this.loading = false));
+    },
+  },
+  computed: {
+    mappedFilter() {
+      if (this.selectedFilter === 'game') return 'JOGOS';
+      if (this.selectedFilter === 'provider') return 'PROVEDORES';
+      if (this.selectedFilter === 'player') return 'JOGADORES';
+      if (this.selectedFilter === 'scalper') return 'CAMBISTAS';
+      if (this.selectedFilter === 'manager') return 'GERENTES';
     },
   },
   created() {

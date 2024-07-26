@@ -2,7 +2,7 @@
   <v-container class="fill-height">
     <v-row no-gutters>
       <v-col cols="12" class="mb-2">
-        <span class="category-label"> Top 10 </span>
+        <span v-if="gameList && gameList.length > 0" class="category-label"> Top 10 </span>
       </v-col>
       <v-col
         class="px-1 r-height"

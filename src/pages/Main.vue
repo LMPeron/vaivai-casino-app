@@ -1,30 +1,36 @@
 <template>
   <div style="background-color: rgb(28, 31, 34); width: 100%">
+    <v-overlay class="align-center justify-center" v-model="loading">
+      <div>
+        <img class="pl-2" :width="isMobile ? '80px' : '140px '" src="../assets/logo.png" alt="" />
+      </div>
+    </v-overlay>
     <div v-if="!appState.running">
       <Carousel :bannerList="bannerList" />
-
-      <v-row class="mb-4 pl-4 pr-4">
-        <v-col>
-          <v-text-field
-            v-model="search"
-            label="Pesquisar"
-            prepend-inner-icon="mdi-magnify"
-            variant="outlined"
-            hide-details
-            single-line
-          ></v-text-field>
-        </v-col>
-        <v-col style="align-content: center">
-          <v-btn
-            style="float: inline-start; background-color: rgb(1, 123, 39); color: white"
-            class="button"
-            :loading="loading"
-            @click="getBySearch()"
-          >
-            Buscar
-          </v-btn>
-        </v-col>
-      </v-row>
+      <v-container>
+        <v-row class="mb-4">
+          <v-col>
+            <v-text-field
+              v-model="search"
+              label="Pesquisar"
+              prepend-inner-icon="mdi-magnify"
+              variant="outlined"
+              hide-details
+              single-line
+            ></v-text-field>
+          </v-col>
+          <v-col style="align-content: center">
+            <v-btn
+              style="float: inline-start; background-color: rgb(1, 123, 39); color: white"
+              class="button"
+              :loading="loading"
+              @click="getBySearch()"
+            >
+              Buscar
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
 
       <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
       <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
@@ -42,7 +48,7 @@
       <OrtizFrame v-else-if="ortizGameHTML" :html="ortizGameHTML" @exit="exitGame()" />
     </div>
     <div v-if="!appState.running" class="mb-4" style="text-align: center">
-      <v-btn v-if="!fullList" variant="tonal" @click="getGameList()"
+      <v-btn v-if="!fullList" :loading="loading" variant="tonal" @click="getMoreGames()"
         ><v-icon style="font-size: smaller">mdi-plus</v-icon>
         <span class="pl-2" style="font-size: smaller">mais jogos</span>
       </v-btn>
@@ -63,7 +69,6 @@ import GameList from '@/components/GameList.vue';
 import ConfigService from '@/service/ConfigService.js';
 import BannerService from '@/service/BannerService.js';
 import GameService from '@/service/GameService.js';
-import ENVIROMENT from '@/env';
 import OrtizFrame from '@/components/OrtizFrame.vue';
 import SoftswissFrame from '@/components/SoftswissFrame.vue';
 import appStore from '@/stores/app';
@@ -118,7 +123,6 @@ export default {
     },
     async getGameList() {
       try {
-        this.loading = true;
         this.firstLoad = false;
         let response;
         if (this.selectedCategory && this.selectedCategory !== 'all') {
@@ -128,6 +132,7 @@ export default {
         } else {
           response = await this.gameService.getAllSorted();
           this.filtered = false;
+          this.fullList = true;
         }
         if (this.row > 0)
           this.gameCategories[this.selectedCategory] = [
@@ -138,22 +143,17 @@ export default {
         this.row = response.data?.row;
       } catch (error) {
         console.log(error);
-      } finally {
-        this.loading = false;
       }
     },
 
     async getBySearch() {
       try {
-        this.loading = true;
         const response = await this.gameService.search(this.search);
         this.gameCategories = response.data?.categories;
         this.searching = true;
         this.fullList = true;
       } catch (error) {
         console.log(error);
-      } finally {
-        this.loading = false;
       }
     },
     async getTopGameList() {
@@ -219,6 +219,12 @@ export default {
         this.loading = false;
       }
     },
+    async getMoreGames() {
+      this.loading = true;
+      this.getGameList().finally(() => {
+        this.loading = false;
+      });
+    },
     exitGame() {
       this.softswissGameUrl = '';
       this.ortizGameHTML = '';
@@ -246,18 +252,20 @@ export default {
       this.firstLoad = true;
       this.row = 0;
       this.getRouteParams();
-      this.getGameList();
+      this.getGameList().finally(() => {
+        this.loading = false;
+      });
     },
-    scrolledBottom: {
-      handler() {
-        const y = this.scrolling.y;
-        if (this.scrolling.arrivedState.bottom && !this.firstLoad && !this.fullList) {
-          this.getGameList().then(() => {
-            this.scrolling.y = y;
-          });
-        }
-      },
-    },
+    // scrolledBottom: {
+    //   handler() {
+    //     const y = this.scrolling.y;
+    //     if (this.scrolling.arrivedState.bottom && !this.firstLoad && !this.fullList) {
+    //       this.getGameList().then(() => {
+    //         this.scrolling.y = y;
+    //       });
+    //     }
+    //   },
+    // },
   },
   created() {
     this.loading = true;
