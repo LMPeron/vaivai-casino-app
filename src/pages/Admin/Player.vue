@@ -15,13 +15,23 @@
               <v-col class="pl-4 pt-8 d-flex">
                 <v-row>
                   <v-col>
-                    <v-date-input
-                      v-model="range"
-                      label="Selecionar período"
-                      max-width="368"
-                      multiple="range"
-                    ></v-date-input>
+                    <v-text-field
+                      v-mask="'##/##/####'"
+                      v-model="startDateInput"
+                      label="Selecione período de início"
+                      max-width="220"
+                    ></v-text-field>
                   </v-col>
+
+                  <v-col>
+                    <v-text-field
+                      v-mask="'##/##/####'"
+                      v-model="endDateInput"
+                      label="Selecione período de fim"
+                      max-width="220"
+                    ></v-text-field>
+                  </v-col>
+
                   <v-col style="align-content: center">
                     <v-btn
                       style="color: #000; background-color: white; align-self: center"
@@ -74,12 +84,14 @@
 </template>
 
 <script>
+import { mask } from 'vue-the-mask';
 import ReportService from '@/service/ReportService';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { format } from 'date-fns';
 
 export default {
-  name: 'Report',
+  name: 'Player',
+  directives: { mask },
   data() {
     return {
       reportService: new ReportService(),
@@ -90,29 +102,26 @@ export default {
       search: '',
       loading: false,
       range: null,
-      startDate: '',
-      endDate: '',
-      requestDate: '',
+      startDateInput: '',
+      endDateInput: '',
+      startDate: new Date(),
+      endDate: new Date(),
+      requestDate: new Date(),
     };
   },
   components: {
     VDateInput,
   },
   methods: {
-    async getPlayerHistory(startDate, endDate) {
+    async getPlayerHistory() {
       try {
         this.loading = true;
-        if (startDate && endDate) this.range = [startDate, endDate];
-        startDate = this.range[0];
-        startDate = new Date(startDate.setHours(0, 0, 0, 0));
-        endDate = this.range[this.range.length - 1];
-        endDate = new Date(endDate.setHours(23, 59, 59, 999));
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDate = this.convertDate(this.startDateInput);
+        this.endDate = this.convertDate(this.endDateInput, false);
         this.requestDate = new Date();
         const response = await this.reportService.getPlayerHistory(
-          startDate,
-          endDate,
+          this.startDate,
+          this.endDate,
           this.username
         );
         this.report = response.data?.report;
@@ -141,16 +150,23 @@ export default {
       if (!value) return 'R$ 0,00';
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
     },
+    convertDate(date, start = true) {
+      const [day, month, year] = date.split('/');
+      const formatted = new Date(year, month - 1, day);
+      return start
+        ? new Date(formatted.setHours(0, 0, 0, 0))
+        : new Date(formatted.setHours(23, 59, 59, 999));
+    },
   },
   created() {
     this.getRouteParams();
-
     this.loading = true;
     const today = new Date();
-    const startDate = new Date(today.setHours(0, 0, 0, 0));
-    this.startDate = startDate;
-    this.endDate = new Date();
-    this.getPlayerHistory(startDate, new Date()).finally(() => (this.loading = false));
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    this.startDateInput = this.formatDateDay(yesterday);
+    this.endDateInput = this.formatDateDay(yesterday);
+    this.getPlayerHistory().finally(() => (this.loading = false));
   },
 };
 </script>
