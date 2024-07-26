@@ -182,10 +182,11 @@ export default {
     this.getRouteParams();
     this.loading = true;
     const today = new Date();
-    const startDate = new Date(today.setHours(0, 0, 0, 0));
-    this.startDate = startDate;
-    this.endDate = new Date();
-    this.getByScalperPlayers(startDate, new Date()).finally(() => (this.loading = false));
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    this.startDateInput = this.formatDateDay(yesterday);
+    this.endDateInput = this.formatDateDay(yesterday);
+    this.getByScalperPlayers().finally(() => (this.loading = false));
   },
 };
 </script>
