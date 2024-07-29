@@ -147,7 +147,6 @@ export default {
         console.log(error);
       }
     },
-
     async getBySearch() {
       try {
         const response = await this.gameService.search(this.search);
@@ -224,6 +223,14 @@ export default {
         console.log(error);
       } finally {
         this.loading = false;
+      }
+    },
+    async getProviders() {
+      try {
+        const response = await this.gameService.getProviders();
+        this.providerList = response.data?.providerList;
+      } catch (error) {
+        console.log(error);
       }
     },
     async getMoreGames() {

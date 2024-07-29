@@ -85,4 +85,13 @@ export default class GameService {
         throw e.response.data || e;
       });
   }
+
+  async getProviders() {
+    return http
+      .get(`/game/providers`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
 }

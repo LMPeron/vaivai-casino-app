@@ -28,6 +28,14 @@ const routes = [
         },
         component: () => import('@/pages/Main.vue'),
       },
+      {
+        path: 'game/provider/:provider',
+        name: 'provider',
+        meta: {
+          breadcrumb: ['Provider'],
+        },
+        component: () => import('@/pages/Main.vue'),
+      },
     ],
   },
   {
