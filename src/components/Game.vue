@@ -8,7 +8,21 @@
       variant="text"
       @click="$emit('open', game)"
     >
+      <div
+        v-if="errorImage"
+        style="
+          width: 251px;
+          height: 135px;
+          border-radius: 5px;
+          background: linear-gradient(90.59deg, rgb(70, 158, 98) -2.73%, rgb(1, 123, 39) 73.29%);
+          align-content: center;
+          text-align-last: center;
+        "
+      >
+        <span style="color: white; font-size: x-large; font-weight: 700"> {{ game.title }} </span>
+      </div>
       <img
+        v-else
         style="width: 100%; height: 100%; border-radius: 5px"
         :src="
           game.Provider?.Platform?.reference === 'softswiss'
@@ -18,6 +32,7 @@
             : game.imgUrl
         "
         alt=""
+        @error="onError"
       />
     </v-card>
     <span style="color: rgb(182, 182, 198); font-size: small">{{ game.title }}</span>
@@ -39,6 +54,7 @@ export default {
   data() {
     return {
       gameService: new GameService(),
+      errorImage: false,
     };
   },
   methods: {
@@ -54,6 +70,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    onError() {
+      this.errorImage = true;
     },
   },
   computed: {
