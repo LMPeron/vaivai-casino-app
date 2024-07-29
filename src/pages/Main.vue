@@ -73,6 +73,7 @@ import OrtizFrame from '@/components/OrtizFrame.vue';
 import SoftswissFrame from '@/components/SoftswissFrame.vue';
 import appStore from '@/stores/app';
 import userStore from '@/stores/user';
+import bannerStore from '@/stores/banner';
 import { useToast } from 'vue-toastification';
 import { useScroll } from '@vueuse/core';
 
@@ -82,6 +83,7 @@ export default {
     return {
       appState: appStore(),
       userState: userStore(),
+      bannerState: bannerStore(),
       scrolling: useScroll(window),
       toast: useToast(),
       row: 0,
@@ -174,8 +176,13 @@ export default {
     },
     async getBanners() {
       try {
+        if (this.bannerState.list.length > 0) {
+          this.bannerList = this.bannerState.list;
+          return;
+        }
         const response = await this.bannerService.getAll();
         this.bannerList = response.data?.bannerList;
+        this.bannerState.setList(this.bannerList);
       } catch (error) {
         console.log(error);
       }
