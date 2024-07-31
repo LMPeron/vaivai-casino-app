@@ -22,15 +22,51 @@
       <v-col class="button-col">
         <v-btn class="button" @click="showByRangeInput = !showByRangeInput"> período </v-btn>
       </v-col>
+
       <v-col
         cols="12"
         class="pl-4 pt-8"
+        v-if="showByRangeInput"
         style="
           background-color: rgba(0, 0, 0, 0.87);
           border-radius: 10px;
           text-align: -webkit-center;
         "
-        v-if="showByRangeInput"
+      >
+        <v-row>
+          <v-col>
+            <v-text-field
+              v-mask="'##/##/####'"
+              v-model="startDateInput"
+              label="Selecione período de início"
+            ></v-text-field>
+          </v-col>
+
+          <v-col>
+            <v-text-field
+              v-mask="'##/##/####'"
+              v-model="endDateInput"
+              label="Selecione período de fim"
+            ></v-text-field>
+          </v-col>
+
+          <v-col style="align-content: center">
+            <v-btn
+              style="color: #000; background-color: white; align-self: center"
+              class="button"
+              @click="getDashboard()"
+            >
+              Filtrar
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
+
+      <!-- 
+      <v-col
+
+
+
       >
         <v-date-input
           v-model="range"
@@ -41,7 +77,7 @@
         <v-btn style="color: #000; background-color: white" class="button" @click="getDashboard()">
           Filtrar
         </v-btn>
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <span class="label">Cassino</span>
@@ -236,9 +272,12 @@
 import userStore from '@/stores/user';
 import AdminService from '@/service/AdminService';
 import { VDateInput } from 'vuetify/labs/VDateInput';
+import { mask } from 'vue-the-mask';
+import { format } from 'date-fns';
 
 export default {
-  name: 'Admin',
+  name: 'Dashboard',
+  directives: { mask },
   data() {
     return {
       userState: userStore(),
@@ -247,25 +286,22 @@ export default {
       loading: false,
       range: null,
       showByRangeInput: false,
-      startDate: '',
-      endDate: '',
+      startDateInput: '',
+      endDateInput: '',
+      startDate: new Date(),
+      endDate: new Date(),
     };
   },
   components: {
     VDateInput,
   },
   methods: {
-    async getDashboard(startDate, endDate) {
+    async getDashboard() {
       try {
-        if (startDate && endDate) this.range = [startDate, endDate];
-        startDate = this.range[0];
-        startDate = new Date(startDate.setHours(0, 0, 0, 0));
-        endDate = this.range[this.range.length - 1];
-        endDate = new Date(endDate.setHours(23, 59, 59, 999));
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.loading = true;
-        const response = await this.adminService.getDashboard(startDate, endDate);
+        this.startDate = this.convertDate(this.startDateInput);
+        this.endDate = this.convertDate(this.endDateInput, false);
+        const response = await this.adminService.getDashboard(this.startDate, this.endDate);
         this.report = response.data?.report;
       } catch (error) {
         console.error(error);
@@ -287,9 +323,9 @@ export default {
       this.loading = true;
       const today = new Date();
       const startDate = new Date(today.setHours(0, 0, 0, 0));
-      this.startDate = startDate;
-      this.endDate = new Date();
-      this.getDashboard(startDate, new Date());
+      this.startDateInput = this.formatDateDay(startDate);
+      this.endDateInput = this.formatDateDay(today);
+      this.getDashboard().finally(() => (this.loading = false));
     },
     async getYesterdayDashboard() {
       this.loading = true;
@@ -298,9 +334,9 @@ export default {
       yesterday.setDate(today.getDate() - 1);
       const startDate = new Date(yesterday.setHours(0, 0, 0, 0));
       const endDate = new Date(yesterday.setHours(23, 59, 59, 999));
-      this.startDate = startDate;
-      this.endDate = endDate;
-      this.getDashboard(startDate, endDate);
+      this.startDateInput = this.formatDateDay(startDate);
+      this.endDateInput = this.formatDateDay(endDate);
+      this.getDashboard().finally(() => (this.loading = false));
     },
     async getLastWeekDashboard() {
       this.loading = true;
@@ -311,9 +347,9 @@ export default {
       const endDate = new Date(today);
       endDate.setDate(today.getDate() - 1);
       endDate.setHours(23, 59, 59, 999);
-      this.startDate = startDate;
-      this.endDate = endDate;
-      this.getDashboard(startDate, endDate);
+      this.startDateInput = this.formatDateDay(startDate);
+      this.endDateInput = this.formatDateDay(endDate);
+      this.getDashboard().finally(() => (this.loading = false));
     },
     async getPastWeekDashboard() {
       this.loading = true;
@@ -324,9 +360,19 @@ export default {
       const endDate = new Date(today);
       endDate.setDate(today.getDate() - 7);
       endDate.setHours(23, 59, 59, 999);
-      this.startDate = startDate;
-      this.endDate = endDate;
-      this.getDashboard(startDate, endDate);
+      this.startDateInput = this.formatDateDay(startDate);
+      this.endDateInput = this.formatDateDay(endDate);
+      this.getDashboard().finally(() => (this.loading = false));
+    },
+    convertDate(date, start = true) {
+      const [day, month, year] = date.split('/');
+      const formatted = new Date(year, month - 1, day);
+      return start
+        ? new Date(formatted.setHours(0, 0, 0, 0))
+        : new Date(formatted.setHours(23, 59, 59, 999));
+    },
+    formatDateDay(date) {
+      return format(date, 'dd/MM/yyyy');
     },
   },
   created() {
