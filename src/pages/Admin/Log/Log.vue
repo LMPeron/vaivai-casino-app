@@ -7,7 +7,7 @@
             <span
               >RESUMO DE {{ formatDateDay(this.startDate) }} A {{ formatDateDay(this.startDate) }} -
               CONSULTADO: {{ formatDateDay(this.requestDate) }} às
-              {{ formatTime(this.requestDate) }} de todos os JOGADORES</span
+              {{ formatTime(this.requestDate) }} de todos os LOGS de ADMIN</span
             >
           </template>
           <template v-slot:text>
@@ -36,7 +36,7 @@
                     <v-btn
                       style="color: #000; background-color: white; align-self: center"
                       class="button"
-                      @click="getPlayerHistory()"
+                      @click="getAllLogs()"
                     >
                       Filtrar
                     </v-btn>
@@ -60,7 +60,7 @@
             no-data-text="Nenhum dado encontrado"
             :loading="loading"
             :headers="headers"
-            :items="report"
+            :items="logList"
             :search="search"
             item-value="name"
           >
@@ -69,11 +69,9 @@
             </template>
             <template v-slot:item="{ item }">
               <tr>
-                <td>{{ item.label === 'bet' ? 'Aposta' : 'Ganho' }}</td>
-                <td>{{ item.Game.title }}</td>
-                <td class="table-value">{{ currency(item.amount / 100) }}</td>
-                <td class="table-value">{{ formatDateTime(item.processedAt) }}</td>
-                <td class="table-value">{{ currency(item.userBalance / 100) }}</td>
+                <td>{{ item.User.username }}</td>
+                <td class="table-value">{{ item.action }}</td>
+                <td class="table-value">{{ formatDateTime(item.createdAt) }}</td>
               </tr>
             </template>
           </v-data-table-virtual>
@@ -85,7 +83,7 @@
 
 <script>
 import { mask } from 'vue-the-mask';
-import ReportService from '@/service/ReportService';
+import LoggerService from '@/service/LoggerService';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { format } from 'date-fns';
 
@@ -94,16 +92,17 @@ export default {
   directives: { mask },
   data() {
     return {
-      reportService: new ReportService(),
-      report: [],
-      total: [],
-      headers: [],
-      headersTotal: [],
+      loggerService: new LoggerService(),
+      logList: [],
       search: '',
       loading: false,
-      range: null,
       startDateInput: '',
       endDateInput: '',
+      headers: [
+        { title: 'Usuário', key: 'User.username', align: 'start', width: '150px' },
+        { title: 'Ação', key: 'action', align: 'end', width: '100px' },
+        { title: 'Data', key: 'createdAt', align: 'end', width: '100px' },
+      ],
       startDate: new Date(),
       endDate: new Date(),
       requestDate: new Date(),
@@ -113,29 +112,19 @@ export default {
     VDateInput,
   },
   methods: {
-    async getPlayerHistory() {
+    async getAllLogs() {
       try {
         this.loading = true;
         this.startDate = this.convertDate(this.startDateInput);
         this.endDate = this.convertDate(this.endDateInput, false);
         this.requestDate = new Date();
-        const response = await this.reportService.getPlayerHistory(
-          this.startDate,
-          this.endDate,
-          this.username
-        );
-        this.report = response.data?.report;
-        this.total = response.data?.total;
-        this.headers = response.data?.headers;
-        this.headersTotal = response.data?.headersTotal;
+        const response = await this.loggerService.getAll(this.startDate, this.endDate);
+        this.logList = response.data?.logList;
       } catch (error) {
         console.error(error);
       } finally {
         this.loading = false;
       }
-    },
-    getRouteParams() {
-      this.username = this.$route.params.username;
     },
     formatDateDay(date) {
       return format(date, 'dd/MM/yyyy');
@@ -146,10 +135,6 @@ export default {
     formatDateTime(date) {
       return format(date, 'dd/MM/yyyy HH:mm:ss');
     },
-    currency(value) {
-      if (!value) return 'R$ 0,00';
-      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-    },
     convertDate(date, start = true) {
       const [day, month, year] = date.split('/');
       const formatted = new Date(year, month - 1, day);
@@ -159,14 +144,11 @@ export default {
     },
   },
   created() {
-    this.getRouteParams();
     this.loading = true;
     const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    this.startDateInput = this.formatDateDay(yesterday);
-    this.endDateInput = this.formatDateDay(yesterday);
-    this.getPlayerHistory().finally(() => (this.loading = false));
+    this.startDateInput = this.formatDateDay(today);
+    this.endDateInput = this.formatDateDay(today);
+    this.getAllLogs();
   },
 };
 </script>

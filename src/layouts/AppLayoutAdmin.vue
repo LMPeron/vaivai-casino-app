@@ -79,6 +79,13 @@ export default {
           value: 'banner',
         },
       ];
+      this.sidebarCategories.Log = [
+        {
+          title: 'Log',
+          icon: 'mdi-file-chart-outline',
+          value: 'log',
+        },
+      ];
     }
   },
 
