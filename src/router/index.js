@@ -77,6 +77,10 @@ const routes = [
         path: 'report/manager/:username',
         component: () => import('@/pages/Admin/Manager.vue'),
       },
+      {
+        path: 'logs',
+        component: () => import('@/pages/Admin/Manager.vue'),
+      },
     ],
   },
 ];
