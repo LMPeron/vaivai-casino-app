@@ -10,7 +10,6 @@
       <router-view></router-view>
     </div>
     <Footer v-if="!appState.running" />
-    <AuthApi />
   </div>
 </template>
 
@@ -20,22 +19,17 @@ import Footer from '@/components/Footer.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import AuthApi from '@/components/api/AuthApi.vue';
 import appStore from '@/stores/app';
+import userStore from '@/stores/user';
 
 export default {
   name: 'Main',
   data() {
     return {
       appState: appStore(),
+      userState: userStore(),
       loading: false,
       isSidebarOpen: false,
       sidebarCategories: {
-        Favoritos: [
-          {
-            title: 'Favoritos',
-            icon: 'mdi-star',
-            value: 'favorites',
-          },
-        ],
         'Todos os jogos': [
           {
             title: 'Todos os jogos',
@@ -77,11 +71,28 @@ export default {
       return window.innerWidth <= 768;
     },
   },
-
+  created() {
+    if (this.userState?._token) {
+      this.sidebarCategories.Favoritos = [
+        {
+          title: 'Favoritos',
+          icon: 'mdi-star',
+          value: 'favorites',
+        },
+      ];
+    }
+  },
   mounted() {
     if (!this.isMobile()) {
       this.isSidebarOpen = true;
     }
+  },
+  props: {
+    auth: {
+      type: Object,
+      required: true,
+      default: () => true,
+    },
   },
 };
 </script>

@@ -149,12 +149,15 @@ export default {
     },
     async getBySearch() {
       try {
+        this.loading = true;
         const response = await this.gameService.search(this.search);
         this.gameCategories = response.data?.categories;
         this.searching = true;
         this.fullList = true;
       } catch (error) {
         console.log(error);
+      } finally {
+        this.loading = false;
       }
     },
     async getTopGameList() {
@@ -187,6 +190,10 @@ export default {
       }
     },
     async openGame(game) {
+      if (!this.userState._token) {
+        this.toast.error('Você precisa estar logado para jogar');
+        return;
+      }
       if (this.userState._user.Wallet.balance === 0) {
         this.toast.error('Saldo insuficiente para jogar. Por favor, faça um depósito.');
         return;
@@ -258,6 +265,9 @@ export default {
     },
     scrolledBottom() {
       return this.scrolling.arrivedState.bottom;
+    },
+    loggedIn() {
+      return this.userState._token;
     },
   },
   watch: {

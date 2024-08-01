@@ -18,7 +18,7 @@
       >
         <Game :game="game" @open="$emit('open', $event)" />
       </v-col>
-      <v-col v-if="!filtered" cols="12">
+      <v-col v-if="!filtered && gameList.length === 12" cols="12">
         <div>
           <v-btn @click="$router.push(`${category}`)" variant="tonal"
             ><v-icon style="font-size: smaller">mdi-plus</v-icon>

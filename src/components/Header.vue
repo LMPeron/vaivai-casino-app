@@ -42,7 +42,15 @@
       >
     </v-col>
 
-    <v-col cols="8" md="8" lg="4" sm="8" sx="2" style="align-content: center; text-align: end">
+    <v-col
+      v-if="userState.user && userState.user?.Wallet && userState._token"
+      cols="8"
+      md="8"
+      lg="4"
+      sm="8"
+      sx="2"
+      style="align-content: center; text-align: end"
+    >
       <div class="justify-end">
         <span
           class="pr-2"
@@ -95,6 +103,26 @@
         </v-menu>
       </div>
     </v-col>
+    <v-col
+      v-else
+      cols="8"
+      md="8"
+      lg="4"
+      sm="8"
+      sx="2"
+      style="align-content: center; text-align: end"
+    >
+      <div class="justify-end">
+        <v-btn
+          style="border: 0; border-radius: 8px; padding: 0 !important"
+          color="white"
+          class="mr-2"
+          @click="redirect('https://vaivaibet.com/?page=cassino')"
+        >
+          <span class="pl-4 pr-4" style="color: rgb(1, 123, 39)"> entrar </span>
+        </v-btn>
+      </div>
+    </v-col>
   </v-row>
 </template>
 
@@ -112,7 +140,10 @@ export default {
       items: [
         {
           title: 'Sair',
-          onClick: () => window.location.replace('https://vaivaibet.com/?page=cassino'),
+          onClick: () => {
+            this.userState.logout();
+            window.location.replace('https://vaivaibet.com/?page=cassino');
+          },
         },
       ],
     };

@@ -49,10 +49,14 @@
 
 <script>
 import GameService from '@/service/GameService.js';
+import userStore from '@/stores/user';
+import { useToast } from 'vue-toastification';
 
 export default {
   data() {
     return {
+      toast: useToast(),
+      userState: userStore(),
       gameService: new GameService(),
       errorImage: false,
     };
@@ -60,6 +64,10 @@ export default {
   methods: {
     async handleFavorite(gameId) {
       try {
+        if (!this.userState._token) {
+          this.toast.error('Você precisa estar logado para favoritar um jogo');
+          return;
+        }
         if (!this.favorited) {
           await this.gameService.favorite(gameId);
           this.game.Favorited.push({});

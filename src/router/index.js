@@ -16,9 +16,6 @@ const routes = [
   {
     path: '/',
     component: AppLayout,
-    meta: {
-      requiresAuth: true,
-    },
     children: [
       {
         path: 'game/:category',
