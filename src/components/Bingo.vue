@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col cols="12" class="mb-2">
         <span v-if="gameList && gameList.length > 0" class="category-label">
-          Ortiz Gaming
+          Ortiz Jogos
           <!-- <img style="width: 22px; padding-left: 5px;" src="../assets/brasil.png"> </img>  -->
         </span>
       </v-col>

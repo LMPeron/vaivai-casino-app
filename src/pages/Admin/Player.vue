@@ -69,7 +69,7 @@
             </template>
             <template v-slot:item="{ item }">
               <tr>
-                <td>{{ item.label === 'bet' ? 'Aposta' : 'Ganho' }}</td>
+                <td>{{ item.label }}</td>
                 <td>{{ item.Game.title }}</td>
                 <td class="table-value">{{ currency(item.amount / 100) }}</td>
                 <td class="table-value">{{ formatDateTime(item.processedAt) }}</td>

@@ -30,7 +30,7 @@ export default {
     return {};
   },
   props: {
-    gameList: {
+    providerList: {
       type: Array,
       default: () => [],
     },

@@ -46,6 +46,15 @@ export default class GameService {
       });
   }
 
+  async getAllSortedByProvider(provider, row) {
+    return http
+      .get(`/game/sorted/provider/${provider}/${row}`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
   async getTop() {
     return http
       .get(`/game/top`)

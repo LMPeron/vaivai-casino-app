@@ -32,8 +32,8 @@
         </v-row>
       </v-container>
 
-      <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
-      <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" />
+      <!-- <Top v-if="showAll" :gameList="topGameList" @open="openGame($event)" />
+      <Bingo v-if="showAll" :gameList="bingoGameList" @open="openGame($event)" /> -->
       <div v-for="(gameList, category) in gameCategories" :key="gameList.id">
         <GameList
           :gameList="gameList"
@@ -42,6 +42,7 @@
           @open="openGame($event)"
         />
       </div>
+      <ProviderList v-if="showAll" :providerList="providerList" />
     </div>
     <div v-else>
       <SoftswissFrame v-if="softswissGameUrl" :gameUrl="softswissGameUrl" @exit="exitGame()" />
@@ -59,18 +60,19 @@
 </template>
 
 <script>
-import SoftSwissService from '@/service/SoftSwissService';
-import OrtizService from '@/service/OrtizService.js';
 import AuthApi from '@/components/api/AuthApi.vue';
 import Carousel from '@/components/Carousel.vue';
 import Top from '@/components/Top.vue';
 import Bingo from '@/components/Bingo.vue';
 import GameList from '@/components/GameList.vue';
+import ProviderList from '@/components/ProviderList.vue';
+import OrtizFrame from '@/components/OrtizFrame.vue';
+import SoftswissFrame from '@/components/SoftswissFrame.vue';
+import SoftSwissService from '@/service/SoftSwissService';
+import OrtizService from '@/service/OrtizService.js';
 import ConfigService from '@/service/ConfigService.js';
 import BannerService from '@/service/BannerService.js';
 import GameService from '@/service/GameService.js';
-import OrtizFrame from '@/components/OrtizFrame.vue';
-import SoftswissFrame from '@/components/SoftswissFrame.vue';
 import appStore from '@/stores/app';
 import userStore from '@/stores/user';
 import bannerStore from '@/stores/banner';
@@ -100,15 +102,18 @@ export default {
       topGameList: [],
       bingoGameList: [],
       bannerList: [],
+      providerList: [],
       softswissGameUrl: '',
       ortizGameHTML: '',
       selectedCategory: '',
+      selectedProvider: '',
       search: '',
       searching: false,
     };
   },
   components: {
     GameList,
+    ProviderList,
     AuthApi,
     Carousel,
     Top,
@@ -122,6 +127,7 @@ export default {
       await this.getGameList();
       await this.getTopGameList();
       await this.getBingoGameList();
+      await this.getProviders();
     },
     async getGameList() {
       try {
@@ -131,10 +137,14 @@ export default {
           response = await this.gameService.getAllSortedByCategory(this.selectedCategory, this.row);
           if (Object.keys(response.data?.categories).length === 0) this.fullList = true;
           this.filtered = true;
-        } else {
+        } else if (this.selectedCategory === 'all') {
           response = await this.gameService.getAllSorted();
           this.filtered = false;
           this.fullList = true;
+        } else if (this.selectedProvider) {
+          response = await this.gameService.getAllSortedByProvider(this.selectedProvider, this.row);
+          if (Object.keys(response.data?.categories).length === 0) this.fullList = true;
+          this.filtered = true;
         }
         if (this.row > 0)
           this.gameCategories[this.selectedCategory] = [
@@ -253,7 +263,8 @@ export default {
       this.appState.setRunning(false);
     },
     getRouteParams() {
-      this.selectedCategory = this.$route.params.category;
+      if (this.$route.params.category) this.selectedCategory = this.$route.params.category;
+      else if (this.$route.params.provider) this.selectedProvider = this.$route.params.provider;
     },
   },
   computed: {
@@ -261,7 +272,11 @@ export default {
       return this.softswissGameUrl || this.ortizGameHTML;
     },
     showAll() {
-      return (this.selectedCategory === '' || this.selectedCategory === 'all') && !this.searching;
+      return (
+        (this.selectedCategory === '' || this.selectedCategory === 'all') &&
+        this.selectedProvider === '' &&
+        !this.searching
+      );
     },
     scrolledBottom() {
       return this.scrolling.arrivedState.bottom;
