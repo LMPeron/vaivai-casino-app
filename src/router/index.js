@@ -59,6 +59,14 @@ const routes = [
         component: () => import('@/pages/Admin/Banner.vue'),
       },
       {
+        path: 'provider',
+        component: () => import('@/pages/Admin/Provider.vue'),
+      },
+      {
+        path: 'category',
+        component: () => import('@/pages/Admin/Category.vue'),
+      },
+      {
         path: 'report',
         component: () => import('@/pages/Admin/Report.vue'),
       },

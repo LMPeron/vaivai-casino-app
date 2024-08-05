@@ -72,6 +72,20 @@ export default {
           value: 'casino',
         },
       ];
+      this.sidebarCategories.Provedores = [
+        {
+          title: 'Provedores',
+          icon: 'mdi-domain',
+          value: 'provider',
+        },
+      ];
+      this.sidebarCategories.Categorias = [
+        {
+          title: 'Categorias',
+          icon: 'mdi-arrange-bring-forward',
+          value: 'category',
+        },
+      ];
       this.sidebarCategories.Banner = [
         {
           title: 'Banner',
