@@ -25,34 +25,30 @@
       <v-col cols="12"> </v-col>
 
       <v-col class="pl-0 pr-0">
-        <v-card class="mb-4">
-          <template v-slot:title>
+        <v-container class="mb-4">
+          <div style="background-color: rgb(33 33 33)" class="pl-2 pt-4 pr-3">
             <span
               >RESUMO DE {{ formatDateDay(this.startDate) }} A {{ formatDateDay(this.endDate) }} -
               CONSULTADO: {{ formatDateDay(this.requestDate) }} às
               {{ formatTime(this.requestDate) }} de todos os {{ mappedFilter }}</span
             >
-          </template>
-          <template v-slot:text>
             <v-row style="border-radius: 10px">
               <v-col class="pl-4 pt-8 d-flex">
                 <v-row>
                   <v-col>
-                    <v-text-field
-                      v-mask="'##/##/####'"
-                      v-model="startDateInput"
-                      label="Selecione período de início"
-                      max-width="220"
-                    ></v-text-field>
+                    <VueDatePicker
+                      style="position: sticky"
+                      :format="format"
+                      v-model="startDate"
+                    ></VueDatePicker>
                   </v-col>
 
                   <v-col>
-                    <v-text-field
-                      v-mask="'##/##/####'"
-                      v-model="endDateInput"
-                      label="Selecione período de fim"
-                      max-width="220"
-                    ></v-text-field>
+                    <VueDatePicker
+                      style="position: sticky"
+                      :format="format"
+                      v-model="endDate"
+                    ></VueDatePicker>
                   </v-col>
 
                   <v-col style="align-content: center">
@@ -78,7 +74,8 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-          </template>
+          </div>
+
           <v-data-table-virtual
             no-data-text="Nenhum dado encontrado"
             :loading="loading"
@@ -135,7 +132,7 @@
               <v-skeleton-loader type="table-row@1"></v-skeleton-loader>
             </template>
           </v-data-table-virtual>
-        </v-card>
+        </v-container>
       </v-col>
     </v-row>
   </div>
@@ -147,6 +144,8 @@ import { VDateInput } from 'vuetify/labs/VDateInput';
 import userStore from '@/stores/user';
 import { format } from 'date-fns';
 import { mask } from 'vue-the-mask';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 export default {
   name: 'Report',
@@ -163,8 +162,6 @@ export default {
       loading: false,
       range: null,
       showByRangeInput: false,
-      startDateInput: '',
-      endDateInput: '',
       startDate: new Date(),
       endDate: new Date(),
       requestDate: new Date(),
@@ -173,16 +170,15 @@ export default {
   },
   components: {
     VDateInput,
+    VueDatePicker,
   },
   methods: {
     async getByGames() {
       try {
         this.loading = true;
-
-        this.startDate = this.convertDate(this.startDateInput);
-        this.endDate = this.convertDate(this.endDateInput, false);
+        this.startDate = this.setHours(this.startDate);
+        this.endDate = this.setHours(this.endDate, false);
         this.requestDate = new Date();
-
         const response = await this.reportService.getByGames(this.startDate, this.endDate);
         this.report = response.data?.report;
         this.total = response.data?.total;
@@ -199,8 +195,8 @@ export default {
     async getByProviders() {
       try {
         this.loading = true;
-        this.startDate = this.convertDate(this.startDateInput);
-        this.endDate = this.convertDate(this.endDateInput, false);
+        this.startDate = this.setHours(this.startDate);
+        this.endDate = this.setHours(this.endDate, false);
         this.requestDate = new Date();
         const response = await this.reportService.getByProviders(this.startDate, this.endDate);
         this.report = response.data?.report;
@@ -217,8 +213,8 @@ export default {
     async getByPlayers() {
       try {
         this.loading = true;
-        this.startDate = this.convertDate(this.startDateInput);
-        this.endDate = this.convertDate(this.endDateInput, false);
+        this.startDate = this.setHours(this.startDate);
+        this.endDate = this.setHours(this.endDate, false);
         this.requestDate = new Date();
         const response = await this.reportService.getByPlayers(this.startDate, this.endDate);
         this.report = response.data?.report;
@@ -235,8 +231,8 @@ export default {
     async getByScalpers() {
       try {
         this.loading = true;
-        this.startDate = this.convertDate(this.startDateInput);
-        this.endDate = this.convertDate(this.endDateInput, false);
+        this.startDate = this.setHours(this.startDate);
+        this.endDate = this.setHours(this.endDate, false);
         this.requestDate = new Date();
         const response = await this.reportService.getByScalpers(this.startDate, this.endDate);
         this.report = response.data?.report;
@@ -253,8 +249,8 @@ export default {
     async getByManagers() {
       try {
         this.loading = true;
-        this.startDate = this.convertDate(this.startDateInput);
-        this.endDate = this.convertDate(this.endDateInput, false);
+        this.startDate = this.setHours(this.startDate);
+        this.endDate = this.setHours(this.endDate, false);
         this.requestDate = new Date();
         const response = await this.reportService.getByManagers(this.startDate, this.endDate);
         this.report = response.data?.report;
@@ -294,14 +290,19 @@ export default {
     formatDateTime(date) {
       return format(date, 'dd/MM/yyyy HH:mm:ss');
     },
-
+    format(date) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    },
     async getYesterdayGamesReport() {
       this.loading = true;
       const today = new Date();
       const yesterday = new Date(today);
       yesterday.setDate(today.getDate() - 1);
-      this.startDateInput = this.formatDateDay(yesterday);
-      this.endDateInput = this.formatDateDay(yesterday);
+      this.startDate = yesterday;
+      this.endDate = yesterday;
       this.getByGames().finally(() => (this.loading = false));
     },
     formatString() {
@@ -314,12 +315,8 @@ export default {
         this.startDate = input;
       }
     },
-    convertDate(date, start = true) {
-      const [day, month, year] = date.split('/');
-      const formatted = new Date(year, month - 1, day);
-      return start
-        ? new Date(formatted.setHours(0, 0, 0, 0))
-        : new Date(formatted.setHours(23, 59, 59, 999));
+    setHours(date, start = true) {
+      return start ? new Date(date.setHours(0, 0, 0, 0)) : new Date(date.setHours(23, 59, 59, 999));
     },
   },
   computed: {

@@ -2,34 +2,30 @@
   <div style="background-color: rgb(241, 241, 241); width: 100%; height: 100%" class="px-10 pt-4">
     <v-row style="justify-content: center">
       <v-col class="pl-0 pr-0">
-        <v-card>
-          <template v-slot:title>
+        <v-container>
+          <div style="background-color: rgb(33 33 33)" class="pl-2 pt-4 pr-3">
             <span
               >RESUMO DE {{ formatDateDay(this.startDate) }} A {{ formatDateDay(this.startDate) }} -
               CONSULTADO: {{ formatDateDay(this.requestDate) }} às
               {{ formatTime(this.requestDate) }} de todos os GERENTES</span
             >
-          </template>
-          <template v-slot:text>
             <v-row style="border-radius: 10px">
               <v-col class="pl-4 pt-8 d-flex">
                 <v-row>
                   <v-col>
-                    <v-text-field
-                      v-mask="'##/##/####'"
-                      v-model="startDateInput"
-                      label="Selecione período de início"
-                      max-width="220"
-                    ></v-text-field>
+                    <VueDatePicker
+                      style="position: sticky"
+                      :format="format"
+                      v-model="startDate"
+                    ></VueDatePicker>
                   </v-col>
 
                   <v-col>
-                    <v-text-field
-                      v-mask="'##/##/####'"
-                      v-model="endDateInput"
-                      label="Selecione período de fim"
-                      max-width="220"
-                    ></v-text-field>
+                    <VueDatePicker
+                      style="position: sticky"
+                      :format="format"
+                      v-model="endDate"
+                    ></VueDatePicker>
                   </v-col>
 
                   <v-col style="align-content: center">
@@ -55,7 +51,7 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-          </template>
+          </div>
 
           <v-data-table-virtual
             no-data-text="Nenhum dado encontrado"
@@ -90,7 +86,7 @@
               <v-skeleton-loader type="table-row@1"></v-skeleton-loader>
             </template>
           </v-data-table-virtual>
-        </v-card>
+        </v-container>
       </v-col>
     </v-row>
   </div>
@@ -101,6 +97,8 @@ import ReportService from '@/service/ReportService';
 import { VDateInput } from 'vuetify/labs/VDateInput';
 import { format } from 'date-fns';
 import { mask } from 'vue-the-mask';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 export default {
   name: 'Manager',
@@ -115,8 +113,6 @@ export default {
       search: '',
       loading: false,
       range: null,
-      startDateInput: '',
-      endDateInput: '',
       startDate: new Date(),
       endDate: new Date(),
       requestDate: new Date(),
@@ -124,17 +120,18 @@ export default {
   },
   components: {
     VDateInput,
+    VueDatePicker,
   },
   methods: {
-    async getByManagerScalpers(startDate, endDate) {
+    async getByManagerScalpers() {
       try {
         this.loading = true;
-        this.startDate = this.convertDate(this.startDateInput);
-        this.endDate = this.convertDate(this.endDateInput, false);
+        this.startDate = this.setHours(this.startDate);
+        this.endDate = this.setHours(this.endDate, false);
         this.requestDate = new Date();
         const response = await this.reportService.getByManagerScalpers(
-          startDate,
-          endDate,
+          this.startDate,
+          this.endDate,
           this.username
         );
         this.report = response.data?.report;
@@ -150,6 +147,12 @@ export default {
     getRouteParams() {
       this.username = this.$route.params.username;
     },
+    format(date) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    },
     currency(value) {
       if (!value) return 'R$ 0,00';
       return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
@@ -163,12 +166,8 @@ export default {
     formatDateTime(date) {
       return format(date, 'dd/MM/yyyy HH:mm:ss');
     },
-    convertDate(date, start = true) {
-      const [day, month, year] = date.split('/');
-      const formatted = new Date(year, month - 1, day);
-      return start
-        ? new Date(formatted.setHours(0, 0, 0, 0))
-        : new Date(formatted.setHours(23, 59, 59, 999));
+    setHours(date, start = true) {
+      return start ? new Date(date.setHours(0, 0, 0, 0)) : new Date(date.setHours(23, 59, 59, 999));
     },
   },
   created() {
@@ -177,8 +176,8 @@ export default {
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
-    this.startDateInput = this.formatDateDay(yesterday);
-    this.endDateInput = this.formatDateDay(yesterday);
+    this.startDate = yesterday;
+    this.endDate = yesterday;
     this.getByManagerScalpers().finally(() => (this.loading = false));
   },
 };
