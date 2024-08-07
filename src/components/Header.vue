@@ -14,7 +14,7 @@
         <div
           class="d-flex align-center"
           style="cursor: pointer"
-          @click="redirect('https://vaivaibet.com/?page=cassino')"
+          @click="redirect('https://vaivaibet.com')"
         >
           <img class="pl-2" :width="isMobile ? '50px' : '100px '" src="../assets/logo.png" alt="" />
         </div>
@@ -31,7 +31,7 @@
       <span
         class="pl-4"
         style="cursor: pointer; font-size: medium"
-        @click="redirect('https://vaivaibet.com/?page=cassino')"
+        @click="redirect('https://vaivaibet.com')"
         >LOTERIA</span
       >
       <span
@@ -117,7 +117,7 @@
           style="border: 0; border-radius: 8px; padding: 0 !important"
           color="white"
           class="mr-2"
-          @click="redirect('https://vaivaibet.com/?page=cassino')"
+          @click="redirect('https://vaivaibet.com')"
         >
           <span class="pl-4 pr-4" style="color: rgb(1, 123, 39)"> entrar </span>
         </v-btn>
@@ -142,7 +142,7 @@ export default {
           title: 'Sair',
           onClick: () => {
             this.userState.logout();
-            window.location.replace('https://vaivaibet.com/?page=cassino');
+            window.location.replace('https://vaivaibet.com');
           },
         },
       ],

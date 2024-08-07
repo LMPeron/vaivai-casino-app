@@ -14,7 +14,7 @@ export default {
     async getRouteParams() {
       try {
         const token = this.$route.params.auth;
-        if (!token) window.location.replace('https://vaivaibet.com/?page=cassino');
+        if (!token) window.location.replace('https://vaivaibet.com');
         this.userStore.setToken(token);
         await this.userStore.renewToken();
         this.$router.push('/game/all');

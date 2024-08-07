@@ -15,6 +15,6 @@
 // PRODUCTION
 export default {
   APP_URL: 'https://vaivaibet.app',
-  MAIN_APP_URL: 'https://vaivaibet.com/?page=cassino',
+  MAIN_APP_URL: 'https://vaivaibet.com',
   VITE_APP_HOST_HTTP: 'https://api.vaivaibet.app/api',
 };

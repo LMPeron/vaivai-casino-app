@@ -465,6 +465,13 @@
   dependencies:
     vue-demi "^0.13.11"
 
+"@vuepic/vue-datepicker@^9.0.1":
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/@vuepic/vue-datepicker/-/vue-datepicker-9.0.1.tgz#be602a7b0661bfb77c8b4d488c4b0132df8df8c4"
+  integrity sha512-5sSdwib5cY8cE4Y7SCh+Zemfp+U/m6BDcgaPwd5Vmdv5LAASyV0wugn9sTb6NWX0sIQEdrGDl/RmD9EjcIke3A==
+  dependencies:
+    date-fns "^3.6.0"
+
 "@vuetify/loader-shared@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@vuetify/loader-shared/-/loader-shared-2.0.3.tgz#11451c717e4a352ec311da52a79c857cd256c92f"

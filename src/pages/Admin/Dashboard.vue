@@ -17,7 +17,7 @@
         <v-btn class="button" @click="getLastWeekDashboard()"> Última semana </v-btn>
       </v-col>
       <v-col class="button-col">
-        <v-btn class="button" @click="getPastWeekDashboard()"> semana passada </v-btn>
+        <v-btn class="button" @click="getLastMonthDashboard()"> Último mês </v-btn>
       </v-col>
       <v-col class="button-col">
         <v-btn class="button" @click="showByRangeInput = !showByRangeInput"> período </v-btn>
@@ -351,14 +351,13 @@ export default {
       this.endDateInput = this.formatDateDay(endDate);
       this.getDashboard().finally(() => (this.loading = false));
     },
-    async getPastWeekDashboard() {
+    async getLastMonthDashboard() {
       this.loading = true;
       const today = new Date();
       const startDate = new Date(today);
-      startDate.setDate(today.getDate() - 14);
       startDate.setHours(0, 0, 0, 0);
       const endDate = new Date(today);
-      endDate.setDate(today.getDate() - 7);
+      startDate.setMonth(today.getMonth() - 1);
       endDate.setHours(23, 59, 59, 999);
       this.startDateInput = this.formatDateDay(startDate);
       this.endDateInput = this.formatDateDay(endDate);

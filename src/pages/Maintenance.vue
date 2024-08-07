@@ -22,7 +22,7 @@ export default {
   name: 'MaintenancePage',
   methods: {
     refreshPage() {
-      window.location.replace('https://vaivaibet.com/?page=cassino');
+      window.location.replace('https://vaivaibet.com');
     },
   },
 };

@@ -219,7 +219,7 @@ export default {
         this.loading = true;
         const isMobile = window.innerWidth <= 768;
         const response = await this.softswissService.open(gameId, isMobile ? 'mobile' : 'desktop', {
-          deposit_url: 'https://vaivaibet.com/?page=cassino',
+          deposit_url: 'https://vaivaibet.com',
           return_url: 'https://vaivaibet.app/game/all',
         });
         this.softswissGameUrl = response.data.game_url;

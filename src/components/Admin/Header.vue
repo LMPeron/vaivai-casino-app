@@ -15,7 +15,7 @@
           <div
             class="d-flex align-center"
             style="cursor: pointer"
-            @click="redirect('https://vaivaibet.com/?page=cassino')"
+            @click="redirect('https://vaivaibet.com')"
           >
             <img
               class="pl-2"
@@ -78,7 +78,7 @@ export default {
         },
         {
           title: 'Sair',
-          onClick: () => window.location.replace('https://vaivaibet.com/?page=cassino'),
+          onClick: () => window.location.replace('https://vaivaibet.com'),
         },
       ],
     };
