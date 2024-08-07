@@ -17,7 +17,7 @@
         "
         @click="createCategoryDialog = true"
         class="button"
-        :loading="categoryLoading"
+        :loading="loading"
       >
         adicionar categoria
       </v-btn>
@@ -31,8 +31,8 @@
           margin-left: 10px;
         "
         class="button"
-        :loading="categoryLoading"
-        @click="save(category)"
+        :loading="loading"
+        @click="saveOrder(category)"
       >
         Salvar ordenação
       </v-btn>
@@ -78,12 +78,33 @@
                         style="
                           margin-top: 0;
                           float: inline-end;
+                          background-color: #c14141;
+                          color: white;
+                          margin-left: 10px;
+                        "
+                        class="button"
+                        @click="
+                          categoryIdDelete = category.id;
+                          deleteCategoryDialog = true;
+                        "
+                        :loading="loading"
+                      >
+                        Remover
+                      </v-btn>
+                      <v-btn
+                        style="
+                          margin-top: 0;
+                          float: inline-end;
                           background-color: rgb(41, 89, 154);
                           color: white;
                           margin-left: 10px;
                         "
                         class="button"
-                        :loading="categoryLoading"
+                        @click="
+                          addGamesDialog = true;
+                          categoryIdAddGame = category.id;
+                        "
+                        :loading="loading"
                       >
                         Adicionar jogos
                       </v-btn>
@@ -97,7 +118,7 @@
                           margin-left: 10px;
                         "
                         class="button"
-                        :loading="categoryLoading"
+                        :loading="loading"
                         @click="save(category)"
                       >
                         Salvar
@@ -116,25 +137,25 @@
                         :key="game.id"
                       >
                         <span>
-                          {{ game.title }}
+                          {{ game.Game?.title }}
                         </span>
                         <img
-                          :class="{ disabled: !game.active }"
+                          :class="{ disabled: !game.Game?.active }"
                           :src="
-                            game.Provider?.Platform?.reference === 'softswiss'
-                              ? `https://cdn.softswiss.net/i/s4/${game.Provider?.reference}/${
-                                  game.identifier.split(':')[1]
-                                    ? game.identifier.split(':')[1]
-                                    : game.identifier
+                            game.Game?.Provider?.Platform?.reference === 'softswiss'
+                              ? `https://cdn.softswiss.net/i/s4/${game.Game?.Provider?.reference}/${
+                                  game.Game?.identifier.split(':')[1]
+                                    ? game.Game?.identifier.split(':')[1]
+                                    : game.Game?.identifier
                                 }.png`
-                              : game.imgUrl
+                              : game.Game?.imgUrl
                           "
                           alt=""
                         />
                         <v-switch
                           class="switch"
-                          :color="game.active ? 'success' : ''"
-                          v-model="game.active"
+                          :color="game.Game?.active ? 'success' : ''"
+                          v-model="game.Game.active"
                         ></v-switch>
                       </div>
                     </draggable>
@@ -147,35 +168,86 @@
       </v-col>
     </v-row>
   </div>
-  <!-- <v-dialog v-model="dialog" max-width="500">
-    <v-card title="Criar Categoria">
-      <v-card-text>
-        
-      </v-card-text>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text="Cancelar" @click="exit()"></v-btn>
-        <v-btn v-if="files.length < 3" text="Selecionar">
-          <label style="cursor: pointer" for="file-upload" class="custom-file-upload">
-            Selecionar
-          </label>
-          <input id="file-upload" type="file" accept=".jpg,.jpeg,.png" @change="onFileChange" />
-        </v-btn>
-        <v-btn v-else text="Salvar" @click="saveImages()"> </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog> -->
   <v-dialog v-model="createCategoryDialog" max-width="500">
     <v-card title="Nova Categoria">
       <v-card-text>
         <v-text-field v-model="newCategoryName" label="Nome" hide-details required></v-text-field>
       </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn text="Cancelar" :loading="loading" @click="exit()"></v-btn>
+        <v-btn text="Salvar" :loading="loading" @click="create()"> </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+  <v-dialog v-model="deleteCategoryDialog" max-width="500">
+    <v-card title="Nova Categoria">
+      <v-card-text> Realmente deseja deletar a categoria? </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn text="Cancelar" :loading="loading" @click="deleteCategoryDialog = false"></v-btn>
+        <v-btn text="Deletar" :loading="loading" @click="del()"> </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="addGamesDialog" min-width="1000">
+    <v-card title="Adicionar Jogos">
+      <v-card-text>
+        <v-row class="pb-4 pt-4 mb-4" style="place-content: flex-end">
+          <v-col class="pt-0" cols="9">
+            <v-text-field v-model="searchText" label="Buscar" hide-details required></v-text-field>
+          </v-col>
+          <v-col cols="3">
+            <v-btn
+              style="background-color: rgb(41, 89, 154)"
+              text="Buscar"
+              :loading="loadingSearch"
+              :disabled="loadingSearch"
+              @click="search()"
+            ></v-btn>
+          </v-col>
+        </v-row>
+
+        <v-btn-toggle
+          style="display: contents"
+          v-model="addingGameList"
+          background-color="primary"
+          dark
+          multiple
+        >
+          <v-btn v-for="game in gameOptions" :key="game.id" :value="game">
+            <div class="list-group-item bg-gray-300 rounded-md text-center">
+              <span style="display: block">
+                {{ game.title }}
+              </span>
+              <img
+                :class="{ disabled: !game.active }"
+                :src="
+                  game.Provider?.Platform?.reference === 'softswiss'
+                    ? `https://cdn.softswiss.net/i/s4/${game.Provider?.reference}/${
+                        game.identifier.split(':')[1]
+                          ? game.identifier.split(':')[1]
+                          : game.identifier
+                      }.png`
+                    : game.imgUrl
+                "
+                alt=""
+              />
+            </div>
+          </v-btn>
+        </v-btn-toggle>
+      </v-card-text>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text="Cancelar" @click="exit()"></v-btn>
-        <v-btn text="Salvar" @click="saveImages()"> </v-btn>
+        <v-btn
+          text="Cancelar"
+          :loading="loading"
+          :disabled="loading"
+          @click="deleteCategoryDialog = false"
+        ></v-btn>
+        <v-btn text="Adicionar" :loading="loading" :disabled="loading" @click="addGames()"> </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -183,8 +255,8 @@
 
 <script>
 import { VueDraggableNext } from 'vue-draggable-next';
-
 import CategoryService from '@/service/CategoryService';
+import GameService from '@/service/GameService';
 import { useToast } from 'vue-toastification';
 
 export default {
@@ -194,11 +266,19 @@ export default {
     return {
       toast: useToast(),
       categoryService: new CategoryService(),
+      gameService: new GameService(),
       categoryList: [],
+      addingGameList: [],
       loading: false,
-      categoryLoading: false,
+      loadingSearch: false,
       createCategoryDialog: false,
+      deleteCategoryDialog: false,
+      addGamesDialog: false,
       newCategoryName: '',
+      categoryIdDelete: '',
+      categoryIdAddGame: '',
+      gameOptions: [],
+      searchText: '',
     };
   },
   methods: {
@@ -215,15 +295,78 @@ export default {
     },
     async save(category) {
       try {
-        this.categoryLoading = true;
+        this.loading = true;
         await this.categoryService.update(category);
         this.toast.success('Categorias salvas com sucesso');
       } catch (error) {
         console.error(error);
         this.toast.error('Erro ao salvar categorias');
       } finally {
-        this.categoryLoading = false;
+        this.loading = false;
       }
+    },
+    async del() {
+      try {
+        this.loading = true;
+        await this.categoryService.delete(this.categoryIdDelete);
+        await this.getCategories();
+        this.toast.success('Categoria deletada com sucesso');
+        this.deleteCategoryDialog = false;
+      } catch (error) {
+        console.error(error);
+        this.toast.error('Erro ao deletar categoria');
+      } finally {
+        this.loading = false;
+      }
+    },
+    async create() {
+      try {
+        this.loading = true;
+        await this.categoryService.create(this.newCategoryName);
+        await this.getCategories();
+        this.toast.success('Categoria criada com sucesso');
+        this.exit();
+      } catch (error) {
+        console.error(error);
+        this.toast.error('Erro ao criar categoria');
+      } finally {
+        this.loading = false;
+      }
+    },
+    async saveOrder() {
+      try {
+        this.loading = true;
+        const categories = this.categoryList.map((category) => category.id);
+        await this.categoryService.saveOrder(categories);
+        this.toast.success('Ordem salva com sucesso');
+      } catch (error) {
+        console.error(error);
+        this.toast.error('Erro ao salvar ordem');
+      } finally {
+        this.loading = false;
+      }
+    },
+    async search() {
+      try {
+        this.loadingSearch = true;
+        const response = await this.gameService.search(this.searchText);
+        this.gameOptions = response.data?.gameList;
+      } catch (error) {
+        console.error(error);
+        this.toast.error('Erro ao buscar jogos');
+      } finally {
+        this.loadingSearch = false;
+      }
+    },
+    addGames() {
+      this.addingGameList.forEach((game) => {
+        this.categoryList.forEach((category) => {
+          if (category.id === this.categoryIdAddGame) {
+            category.Games.push({ Game: game });
+          }
+        });
+      });
+      this.addGamesDialog = false;
     },
     exit() {
       this.createCategoryDialog = false;

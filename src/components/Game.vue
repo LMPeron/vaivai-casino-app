@@ -19,26 +19,30 @@
           text-align-last: center;
         "
       >
-        <span style="color: white; font-size: x-large; font-weight: 700"> {{ game.title }} </span>
+        <span style="color: white; font-size: x-large; font-weight: 700">
+          {{ game.Game.title }}
+        </span>
       </div>
       <img
         v-else
         style="width: 100%; height: 100%; border-radius: 5px"
         :src="
-          game.Provider?.Platform?.reference === 'softswiss'
-            ? `https://cdn.softswiss.net/i/s2/${game.Provider?.reference}/${
-                game.identifier.split(':')[1] ? game.identifier.split(':')[1] : game.identifier
+          game.Game?.Provider?.Platform?.reference === 'softswiss'
+            ? `https://cdn.softswiss.net/i/s2/${game.Game?.Provider?.reference}/${
+                game.Game?.identifier.split(':')[1]
+                  ? game.Game?.identifier.split(':')[1]
+                  : game.Game?.identifier
               }.png`
-            : game.imgUrl
+            : game.Game?.imgUrl
         "
         alt=""
         @error="onError"
       />
     </v-card>
-    <span style="color: rgb(182, 182, 198); font-size: small">{{ game.title }}</span>
+    <span style="color: rgb(182, 182, 198); font-size: small">{{ game.Game?.title }}</span>
     <span
       class="favorite-btn pr-2"
-      @click="handleFavorite(game.id)"
+      @click="handleFavorite(game.Game?.id)"
       :class="{ favorited: favorited }"
     >
       <v-icon v-if="favorited" small>mdi-star</v-icon>
@@ -85,7 +89,7 @@ export default {
   },
   computed: {
     favorited() {
-      return this.game.Favorited.length > 0;
+      return this.game.Game?.Favorited.length > 0;
     },
   },
   props: {

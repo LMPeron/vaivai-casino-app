@@ -42,7 +42,7 @@
           @open="openGame($event)"
         />
       </div>
-      <ProviderList v-if="showAll" :providerList="providerList" />
+      <!-- <ProviderList v-if="showAll" :providerList="providerList" /> -->
     </div>
     <div v-else>
       <SoftswissFrame v-if="softswissGameUrl" :gameUrl="softswissGameUrl" @exit="exitGame()" />
@@ -125,8 +125,8 @@ export default {
     async getData() {
       await this.getBanners();
       await this.getGameList();
-      await this.getTopGameList();
-      await this.getBingoGameList();
+      // await this.getTopGameList();
+      // await this.getBingoGameList();
       await this.getProviders();
     },
     async getGameList() {
@@ -209,8 +209,10 @@ export default {
         return;
       }
       this.appState.setRunning(true);
-      if (game.Provider?.Platform?.reference === 'softswiss') await this.openSoftswissGame(game.id);
-      else if (game.Provider?.Platform?.reference === 'ortiz') await this.openOrtizGame(game.id);
+      if (game.Game.Provider?.Platform?.reference === 'softswiss')
+        await this.openSoftswissGame(game.Game.id);
+      else if (game.Game.Provider?.Platform?.reference === 'ortiz')
+        await this.openOrtizGame(game.Game.id);
     },
     async openSoftswissGame(gameId) {
       try {

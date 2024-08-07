@@ -31,4 +31,24 @@ export default class CategoryService {
         throw e.response.data || e;
       });
   }
+
+  async delete(categoryId) {
+    return http
+      .delete(`/category/${categoryId}`)
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
+
+  async saveOrder(categoryIds) {
+    return http
+      .put(`/category/order`, {
+        categoryList: categoryIds,
+      })
+      .then((r) => r.data)
+      .catch((e) => {
+        throw e.response.data || e;
+      });
+  }
 }

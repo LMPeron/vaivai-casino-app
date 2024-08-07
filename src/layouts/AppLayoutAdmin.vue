@@ -65,13 +65,6 @@ export default {
 
   created() {
     if (this.userState?._user?.role > 6) {
-      this.sidebarCategories.Cassino = [
-        {
-          title: 'Cassino',
-          icon: 'mdi-slot-machine',
-          value: 'casino',
-        },
-      ];
       this.sidebarCategories.Provedores = [
         {
           title: 'Provedores',
